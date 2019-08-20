@@ -1,0 +1,22 @@
+{
+  "name": "huckleberry",
+  "version": "1.0.0",
+  "description": "The onboarding assistant that does your dirty work.",
+  "main": "index.js",
+  "repository": "git@github.com:teamgunio/huckleberry",
+  "author": "Danny Graham <good.midget@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "stack/*"
+  ],
+  "devDependencies": {
+    "oao": "^1.7.0"
+  },
+  "scripts": {
+    "ops:gcloud:config": "gcloud config set compute/zone us-central1-a; gcloud config set compute/region us-central; gcloud config set project gunio-tools",
+    "ops:gcloud:connect": "gcloud config configurations activate gunio-tools && gcloud auth configure-docker",
+    "ops:gcloud:setup": "gcloud config configurations create gunio-tools && gcloud auth login && npm run ops:gcloud:config",
+    "release": "oao publish"
+  }
+}
