@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+const { npm_package_version } = process.env;
+
 describe('AppController', () => {
   let appController: AppController;
 
@@ -15,8 +17,14 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Hello from Huckleberry at the right version"', () => {
+      expect(appController.getHello()).toBe(`Huckleberry v${npm_package_version} says, "Oh, hello."`);
+    });
+  });
+
+  describe('version', () => {
+    it('should return the proper package version', () => {
+      expect(appController.getVersion()).toBe(`${npm_package_version}`);
     });
   });
 });

@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
+const { npm_package_version } = process.env;
+
 describe('AppController (e2e)', () => {
   let app;
 
@@ -18,6 +20,13 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect(`Huckleberry v${npm_package_version} says, "Oh, hello."`);
+  });
+
+  it('/version (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/version')
+      .expect(200)
+      .expect(`${npm_package_version}`);
   });
 });
