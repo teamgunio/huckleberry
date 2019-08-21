@@ -44,7 +44,11 @@ class App extends Component {
             </div>
           </header>
           <main className="App-main">
-            <div></div>
+            <div className="App-splash">
+              <h1>The onboarding assistant that does your dirty work.</h1>
+              <h2>Coming Soon.</h2>
+              <h3>A <a className="pill" href="https://gun.io">Gun.io</a> Production</h3>
+            </div>
           </main>
           <footer className="App-footer">
             <div className="App-info">
