@@ -14,6 +14,7 @@
     "oao": "^1.7.0"
   },
   "scripts": {
+    "ops:cluster:connect": "gcloud container clusters get-credentials tools --zone us-central1-a --project gunio-tools",
     "ops:gcloud:config": "gcloud config set compute/zone us-central1-a; gcloud config set compute/region us-central; gcloud config set project gunio-tools",
     "ops:gcloud:connect": "gcloud config configurations activate gunio-tools && gcloud auth configure-docker",
     "ops:gcloud:setup": "gcloud config configurations create gunio-tools && gcloud auth login && npm run ops:gcloud:config",
