@@ -1,5 +1,12 @@
+#root {
+  height: 100%;
+}
+
 .App {
-  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .App-banner {
@@ -18,7 +25,7 @@
   justify-content: center;
   align-content: center;
   vertical-align: middle;
-  font-size: 4vh;
+  font-size: 1.8em;
   margin-left: 0.3em;
 }
 
@@ -29,13 +36,34 @@
 
 .App-header {
   background-color: #282c34;
-  height: 10vh;
+  height: 3rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  font-size: calc(10px + 2vmin);
+  /*font-size: calc(10px + 2vmin);*/
   color: white;
+}
+
+.App-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-footer {
+  display: flex;
+  flex-direction: row;
+}
+
+.App-info {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: .8em;
+  color: #ccc;
+  margin: 0.4em;
 }
 
 .App-link {
