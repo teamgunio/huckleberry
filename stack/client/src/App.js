@@ -1,29 +1,64 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 import { version } from '../package.json';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div className="App-banner">
-          <img src={logo} className="App-logo" alt="logo" />
-          <div className="App-label">Huckleberry</div>
+const { REACT_APP_API_BASE } = process.env;
+
+const AppContext = React.createContext('app');
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      apiVersion: null,
+    };
+  }
+
+  componentDidMount() {
+    this.load();
+  }
+
+  async load() {
+    try {
+      const res = await fetch(`${REACT_APP_API_BASE}/version`)
+      const version = await res.text()
+      this.setState({
+        apiVersion: version
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  render() {
+    const { apiVersion } = this.state
+    return (
+      <AppContext.Provider value={apiVersion}>
+        <div className="App">
+          <header className="App-header">
+            <div className="App-banner">
+              <img src={logo} className="App-logo" alt="logo" />
+              <div className="App-label">Huckleberry</div>
+            </div>
+          </header>
+          <main className="App-main">
+            <div></div>
+          </main>
+          <footer className="App-footer">
+            <div className="App-info">
+              <div className="copywrite">&copy; 2019 Gun.io, Inc.</div>
+              <div className="version">
+                Client v{version}
+                { apiVersion && ` | Server v${apiVersion}` }
+              </div>
+            </div>
+          </footer>
         </div>
-      </header>
-      <main className="App-main">
-        <div></div>
-      </main>
-      <footer className="App-footer">
-        <div className="App-info">
-          <div className="copywrite">&copy; 2019 Gun.io, Inc.</div>
-          <div className="version">v{version}</div>
-        </div>
-      </footer>
-    </div>
-  );
+      </AppContext.Provider>
+    );
+  }
 }
 
 export default App;
