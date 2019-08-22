@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import openSocket from 'socket.io-client';
+
 import logo from './logo.svg';
 import './App.css';
 
@@ -27,6 +29,8 @@ class App extends Component {
       this.setState({
         apiVersion: version
       });
+      const socket = openSocket('http://localhost:3001/api/events');
+      socket.on('events', res => console.log('event',res));
     } catch (err) {
       console.error(err);
     }
