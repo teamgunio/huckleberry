@@ -4,6 +4,7 @@ steps:
   args:
   - '-c'
   - |
+    git fetch --all --prune
     git describe --exact-match --tags HEAD
     [[ ! -z "$(git describe --exact-match --tags HEAD)" ]] && echo "Tag Found"
     ( [[ ! -z "$(git describe --exact-match --tags HEAD)" ]] && \
@@ -21,10 +22,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['install']
-
-- name: 'gcr.io/cloud-builders/npm'
-  entrypoint: 'npx'
-  args: ['oao', 'bootstrap']
+  dir: 'stack/api'
 
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['build']
