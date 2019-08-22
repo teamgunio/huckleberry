@@ -41,8 +41,8 @@ steps:
       [[ "$BRANCH_NAME" == "master" ]] && \
       gcloud container clusters get-credentials \
         --project="$PROJECT_ID" \
-        --zone="$CLOUDSDK_COMPUTE_ZONE" \
-        "$CLOUDSDK_CONTAINER_CLUSTER" && \
+        --zone="us-central1-a" \
+        "tools" && \
       /builder/kubectl.bash set image deployment huckleberry-api api=gcr.io/$PROJECT_ID/huckleberry/api:$SHORT_SHA && \
       /builder/kubectl.bash rollout status deployment huckleberry-api
     ) \
