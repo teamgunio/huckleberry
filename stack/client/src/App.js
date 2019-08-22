@@ -29,7 +29,7 @@ class App extends Component {
       this.setState({
         apiVersion: version
       });
-      const socket = openSocket(`${REACT_APP_API_BASE}/events`);
+      const socket = openSocket(`${REACT_APP_API_BASE}/events`, { path: '/api' });
       socket.on('events', res => console.log('event',res));
     } catch (err) {
       console.error(err);
