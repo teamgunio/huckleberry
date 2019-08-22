@@ -25,6 +25,15 @@ steps:
   dir: 'stack/client'
 
 - name: 'gcr.io/cloud-builders/yarn'
+  args: ['test']
+  dir: 'stack/client'
+  env:
+  - 'NODE_ENV=test'
+  - 'CI=true'
+  - 'REACT_APP_LOG_LEVEL=warn'
+  - 'REACT_APP_API_BASE=/api'
+
+- name: 'gcr.io/cloud-builders/yarn'
   args: ['build']
   dir: 'stack/client'
   env:

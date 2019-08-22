@@ -23,9 +23,9 @@ describe('AppController (e2e)', () => {
       .expect(`Huckleberry v${npm_package_version} says, "Oh, hello."`);
   });
 
-  it('/version (GET)', () => {
+  it('/api/version (GET)', () => {
     return request(app.getHttpServer())
-      .get('/version')
+      .get('/api/version')
       .expect(200)
       .expect(`${npm_package_version}`);
   });

@@ -25,6 +25,14 @@ steps:
   dir: 'stack/api'
 
 - name: 'gcr.io/cloud-builders/yarn'
+  args: ['test']
+  dir: 'stack/api'
+
+- name: 'gcr.io/cloud-builders/yarn'
+  args: ['run', 'test:e2e']
+  dir: 'stack/api'
+
+- name: 'gcr.io/cloud-builders/yarn'
   args: ['build']
   dir: 'stack/api'
 
