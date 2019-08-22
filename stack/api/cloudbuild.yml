@@ -1,0 +1,52 @@
+steps:
+- name: 'gcr.io/cloud-builders/kubectl'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    git describe --exact-match --tags HEAD
+    [[ ! -z "$(git describe --exact-match --tags HEAD)" ]] && echo "Tag Found"
+    ( [[ ! -z "$(git describe --exact-match --tags HEAD)" ]] && \
+      [[ "$BRANCH_NAME" == "master" ]] && \
+      echo "This build should deploy."
+    ) \
+    || echo "This build should not deploy; it's not a tag, or it's not on master."
+
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    docker pull gcr.io/$PROJECT_ID/huckleberry/api:latest || exit 0
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/huckleberry/api:$SHORT_SHA', '--cache-from', 'gcr.io/$PROJECT_ID/huckleberry/api:latest', '.']
+  dir: 'stack/api'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/huckleberry/api:$SHORT_SHA']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['tag', 'gcr.io/$PROJECT_ID/huckleberry/api:$SHORT_SHA', 'gcr.io/$PROJECT_ID/huckleberry/api:latest']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/huckleberry/api:latest']
+
+- name: 'gcr.io/cloud-builders/kubectl'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    ( [[ ! -z "$(git describe --exact-match --tags HEAD)" ]] && \
+      [[ "$BRANCH_NAME" == "master" ]] && \
+      gcloud container clusters get-credentials \
+        --project="$PROJECT_ID" \
+        --zone="$CLOUDSDK_COMPUTE_ZONE" \
+        "$CLOUDSDK_CONTAINER_CLUSTER" && \
+      /builder/kubectl.bash set image deployment huckleberry-api api=gcr.io/$PROJECT_ID/huckleberry/api:$SHORT_SHA && \
+      /builder/kubectl.bash rollout status deployment huckleberry-api
+    ) \
+    || echo "Skipping deploy"
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=tools'
