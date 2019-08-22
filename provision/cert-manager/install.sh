@@ -23,3 +23,6 @@ helm install \
   --namespace cert-manager \
   --version v0.9.1 \
   jetstack/cert-manager
+
+# Create our certificate issuer
+kubectl apply -f issuer.yml
