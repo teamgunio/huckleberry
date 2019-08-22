@@ -4,6 +4,7 @@ steps:
   args:
   - '-c'
   - |
+    git fetch --tags
     git fetch origin 'refs/tags/*:refs/tags/*'
     git describe --exact-match --tags HEAD
     [[ ! -z "$(git describe --exact-match --tags HEAD)" ]] && echo "Tag Found"
