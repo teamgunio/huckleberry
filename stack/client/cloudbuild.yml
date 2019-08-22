@@ -33,6 +33,16 @@ steps:
   - 'REACT_APP_LOG_LEVEL=warn'
   - 'REACT_APP_API_BASE=/api'
 
+# Run Cypress e2e tests
+# - name: 'gcr.io/cloud-builders/yarn'
+#   args: ['run', 'test:e2e']
+#   dir: 'stack/client'
+#   env:
+#   - 'NODE_ENV=test'
+#   - 'CI=true'
+#   - 'REACT_APP_LOG_LEVEL=warn'
+#   - 'REACT_APP_API_BASE=/api'
+
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['build']
   dir: 'stack/client'
