@@ -52,7 +52,7 @@ steps:
         --project="$PROJECT_ID" \
         --zone="us-central1-a" \
         "tools" && \
-      /builder/kubectl.bash set image deployment huckleberry-client client=gcr.io/$PROJECT_ID/huckleberry/client:$SHORT_SHA && \
+      /builder/kubectl.bash set image deployment huckleberry-client huckleberry-client=gcr.io/$PROJECT_ID/huckleberry/client:$SHORT_SHA && \
       /builder/kubectl.bash rollout status deployment huckleberry-client
     ) \
     || echo "Skipping deploy"
