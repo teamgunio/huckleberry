@@ -1,9 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import TestRenderer from "react-test-renderer";
+
+import { Auth0Context } from "./react-auth0-wrapper";
 import App from './App';
 
 it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const isAuthenticated = false;
+  const user = {};
+  const loading = false;
+  const popupOpen = false;
+  const loginWithPopup = false;
+  const handleRedirectCallback = () => {};
+  const logout = () => {};
+
+  TestRenderer.create(
+    <Auth0Context.Provider
+      value={{
+        isAuthenticated,
+        user,
+        loading,
+        popupOpen,
+        loginWithPopup,
+        handleRedirectCallback,
+        logout,
+      }}
+    >
+      <App />
+    </Auth0Context.Provider>
+  );
 });
