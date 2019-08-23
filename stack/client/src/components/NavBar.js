@@ -29,7 +29,9 @@ const NavBar = () => {
       { isAuthenticated &&
         <Button
           className={classes.button}
-          onClick={() => logout()}
+          onClick={() => logout({
+            returnTo: window.location.origin
+          })}
         >
           Log out
         </Button>
