@@ -7,11 +7,15 @@ import * as serviceWorker from './serviceWorker';
 import { Auth0Provider } from "./react-auth0-wrapper";
 
 const {
+  NODE_ENV,
   REACT_APP_AUTH0_DOMAIN,
   REACT_APP_AUTH0_CLIENT_ID,
 } = process.env
 
-console.log(REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID)
+// Force SSL Upgrade
+if (NODE_ENV === 'production' && !/https/.test(window.location.protocol)) {
+  window.location.href = window.location.href.replace('http:', 'https:');    
+}
 
 // A function that routes the user to the right place
 // after login
