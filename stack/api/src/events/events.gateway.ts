@@ -8,7 +8,7 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Client, Server } from 'socket.io';
 
-@WebSocketGateway({ namespace: 'events', path: '/api' })
+@WebSocketGateway({ namespace: 'api/rtm/events', path: '/api/rtm' })
 export class EventsGateway {
   @WebSocketServer()
   server: Server;

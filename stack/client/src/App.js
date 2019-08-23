@@ -29,8 +29,14 @@ class App extends Component {
       this.setState({
         apiVersion: version
       });
-      const socket = openSocket(`${REACT_APP_API_BASE}/events`, { path: '/api' });
+      const socket = openSocket(`${REACT_APP_API_BASE}/rtm/events`, { path: '/api/rtm' });
       socket.on('events', res => console.log('event',res));
+      socket.on('connect', () => {
+        setInterval(() => {
+          socket.emit('events', { test: 'test' });
+        }, 1000)
+      })
+
     } catch (err) {
       console.error(err);
     }
