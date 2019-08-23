@@ -7,6 +7,8 @@ import NavBar from './components/NavBar';
 import Loading from './components/Loading';
 import Splash from './components/Splash';
 
+import Dashboard from './views/Dashboard';
+
 import logo from './logo.svg';
 import './App.css';
 
@@ -39,7 +41,8 @@ const AppComponent = (props) => {
       </header>
       <main className="App-main">
         { loading && <Loading /> }
-        <Splash />
+        { !isAuthenticated && <Splash /> }
+        { isAuthenticated && <Dashboard /> }
       </main>
       <footer className="App-footer">
         <div className="App-info">
