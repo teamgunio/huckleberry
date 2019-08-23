@@ -11,6 +11,8 @@ const {
   REACT_APP_AUTH0_CLIENT_ID,
 } = process.env
 
+console.log(REACT_APP_AUTH0_DOMAIN, REACT_APP_AUTH0_CLIENT_ID)
+
 // A function that routes the user to the right place
 // after login
 const onRedirectCallback = appState => {
