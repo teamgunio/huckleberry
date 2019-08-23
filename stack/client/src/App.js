@@ -15,13 +15,17 @@ const { REACT_APP_API_BASE } = process.env;
 const AppContext = React.createContext('app');
 
 const AppComponent = (props) => {
-  const { apiVersion } = props
+  const { apiVersion, ws } = props
   const {
     loading,
-    // isAuthenticated,
+    isAuthenticated,
     // loginWithRedirect,
     // logout
   } = useAuth0();
+
+  if (isAuthenticated) {
+    ws()
+  }
 
   return (
     <div className="App">
@@ -65,6 +69,16 @@ class App extends Component {
     this.load();
   }
 
+  ws = () => {
+    const socket = openSocket(`${REACT_APP_API_BASE}/rtm/events`, { path: '/api/rtm' });
+    socket.on('events', res => console.log('event',res));
+    // socket.on('connect', () => {
+    //   setInterval(() => {
+    //     socket.emit('events', { test: 'test' });
+    //   }, 1000)
+    // })
+  }
+
   async load() {
     try {
       const res = await fetch(`${REACT_APP_API_BASE}/version`)
@@ -72,13 +86,6 @@ class App extends Component {
       this.setState({
         apiVersion: version
       });
-      const socket = openSocket(`${REACT_APP_API_BASE}/rtm/events`, { path: '/api/rtm' });
-      socket.on('events', res => console.log('event',res));
-      // socket.on('connect', () => {
-      //   setInterval(() => {
-      //     socket.emit('events', { test: 'test' });
-      //   }, 1000)
-      // })
 
     } catch (err) {
       console.error(err);
@@ -89,7 +96,7 @@ class App extends Component {
     const { apiVersion } = this.state
     return (
       <AppContext.Provider value={apiVersion}>
-        <AppComponent apiVersion={apiVersion} />
+        <AppComponent apiVersion={apiVersion} ws={this.ws}/>
       </AppContext.Provider>
     );
   }
