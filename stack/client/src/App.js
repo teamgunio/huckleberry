@@ -5,6 +5,7 @@ import { version } from '../package.json';
 import { useAuth0 } from "./react-auth0-wrapper";
 import NavBar from './components/NavBar';
 import Loading from './components/Loading';
+import Splash from './components/Splash';
 
 import logo from './logo.svg';
 import './App.css';
@@ -38,11 +39,7 @@ const AppComponent = (props) => {
       </header>
       <main className="App-main">
         { loading && <Loading /> }
-        <div className="App-splash">
-          <h1>The onboarding assistant that does your dirty work.</h1>
-          <h2>Coming Soon.</h2>
-          <h3>A <a className="pill" href="https://gun.io">Gun.io</a> Production</h3>
-        </div>
+        <Splash />
       </main>
       <footer className="App-footer">
         <div className="App-info">
