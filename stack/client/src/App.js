@@ -4,6 +4,7 @@ import { version } from '../package.json';
 
 import { useAuth0 } from "./react-auth0-wrapper";
 import NavBar from './components/NavBar';
+import Loading from './components/Loading';
 
 import logo from './logo.svg';
 import './App.css';
@@ -22,10 +23,6 @@ const AppComponent = (props) => {
     // logout
   } = useAuth0();
 
-  if (loading) {
-    return <div>Loading</div>;
-  }
-
   return (
     <div className="App">
       <header className="App-header">
@@ -36,6 +33,7 @@ const AppComponent = (props) => {
         <NavBar/>
       </header>
       <main className="App-main">
+        { loading && <Loading /> }
         <div className="App-splash">
           <h1>The onboarding assistant that does your dirty work.</h1>
           <h2>Coming Soon.</h2>
