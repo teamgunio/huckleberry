@@ -1,3 +1,8 @@
+secrets:
+- kmsKeyName: projects/gunio-tools/locations/global/keyRings/huckleberry-client/cryptoKeys/REACT_APP_AUTH0_CLIENT_ID
+  secretEnv:
+    REACT_APP_AUTH0_CLIENT_ID: CiQA2QPyrRraXpwQKWZ/UyaU+q0yFAKiZmgSa3FOOEWZsnHupbUSSQBRwF/rpS024yKZGZ2mCLur5NCMoP5gFXYmYaeX+/4ta5BRREPLgAGqb9hdrqSZifiyI7H66+yLG+4V0DoIHpkoaOy2Y6+NKuI=
+
 steps:
 - name: 'gcr.io/cloud-builders/kubectl'
   entrypoint: 'bash'
@@ -27,11 +32,13 @@ steps:
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['test']
   dir: 'stack/client'
+  secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
   env:
   - 'NODE_ENV=test'
   - 'CI=true'
   - 'REACT_APP_LOG_LEVEL=warn'
   - 'REACT_APP_API_BASE=/api'
+  - 'REACT_APP_AUTH0_DOMAIN=gun-io.auth0.com'
 
 # Run Cypress e2e tests
 # - name: 'gcr.io/cloud-builders/yarn'
@@ -46,11 +53,13 @@ steps:
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['build']
   dir: 'stack/client'
+  secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
   env:
   - 'NODE_ENV=production'
   - 'CI=true'
   - 'REACT_APP_LOG_LEVEL=warn'
   - 'REACT_APP_API_BASE=/api'
+  - 'REACT_APP_AUTH0_DOMAIN=gun-io.auth0.com'
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/huckleberry/client:$SHORT_SHA', '--cache-from', 'gcr.io/$PROJECT_ID/huckleberry/client:latest', '.']

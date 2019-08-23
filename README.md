@@ -37,3 +37,17 @@ Setup, authorize and configure `gcloud` & `kubectl`.
 npm run ops:gcloud:setup
 npm run ops:gcloud:connect
 ```
+
+# Tips & Tricks
+
+## Cloud Build Secrets
+You'll need to add a new key to the appropriate key ring. Then you'll need to pass up the value for encrypted storage. For example:
+
+```bash
+echo -n [secret-text] | gcloud kms encrypt \
+  --plaintext-file=- \
+  --ciphertext-file=- \
+  --location=global \
+  --keyring=huckleberry-client \
+  --key=REACT_APP_AUTH0_CLIENT_ID | base64
+```
