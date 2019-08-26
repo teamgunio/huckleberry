@@ -1,4 +1,5 @@
 import React from "react";
+
 import { makeStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -40,11 +41,11 @@ const Resources = () => {
   return (
     <div className={classes.root}>
       <div className={classes.panels}>
-        <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+        <ExpansionPanel expanded={expanded === 'integrations'} onChange={handleChange('integrations')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
+            aria-controls="integrationsbh-content"
+            id="integrationsbh-header"
           >
             <Typography className={classes.heading}>Integrations</Typography>
             <Typography className={classes.secondaryHeading}>
@@ -52,14 +53,14 @@ const Resources = () => {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Integrations />
+            <Integrations/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <ExpansionPanel expanded={expanded === 'workflows'} onChange={handleChange('workflows')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
+            aria-controls="workflowsbh-content"
+            id="workflowsbh-header"
           >
             <Typography className={classes.heading}>Workflows</Typography>
             <Typography className={classes.secondaryHeading}>
@@ -72,11 +73,11 @@ const Resources = () => {
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <ExpansionPanel expanded={expanded === 'clients'} onChange={handleChange('clients')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3bh-content"
-            id="panel3bh-header"
+            aria-controls="clientsbh-content"
+            id="clientsbh-header"
           >
             <Typography className={classes.heading}>Clients</Typography>
           </ExpansionPanelSummary>
@@ -86,11 +87,11 @@ const Resources = () => {
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
+        <ExpansionPanel expanded={expanded === 'users'} onChange={handleChange('users')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel4bh-content"
-            id="panel4bh-header"
+            aria-controls="usersbh-content"
+            id="usersbh-header"
           >
             <Typography className={classes.heading}>Users</Typography>
           </ExpansionPanelSummary>

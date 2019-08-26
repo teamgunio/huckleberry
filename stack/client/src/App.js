@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import { Router } from "react-router-dom";
+
 import openSocket from 'socket.io-client';
 import { version } from '../package.json';
 
 import { useAuth0 } from "./react-auth0-wrapper";
-import NavBar from './components/NavBar';
+import history from "./history";
+
 import Loading from './components/Loading';
+import NavBar from './components/NavBar';
 import Splash from './components/Splash';
 
 import Dashboard from './views/Dashboard';
@@ -31,6 +35,7 @@ const AppComponent = (props) => {
   }
 
   return (
+    <Router history={history}>
     <div className="App">
       <header className="App-header">
         <div className="App-banner">
@@ -54,6 +59,7 @@ const AppComponent = (props) => {
         </div>
       </footer>
     </div>
+    </Router>
   );
 };
 
