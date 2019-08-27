@@ -51,16 +51,27 @@ const NewIntegration = props => {
         >
           <MenuItem value="slack">Slack</MenuItem>
           <MenuItem value="jira">JIRA</MenuItem>
+          <MenuItem value="github">GitHub</MenuItem>
         </Select>
       </FormControl>
       { values.type !== '' &&
         <FormControl className={classes.formControl}>
-          <TextField
-            id="workspace"
-            label="Workspace"
-            placeholder="Workspace URL"
-            margin="normal"
-          />
+          { (values.type === 'slack' || values.type === 'jira') &&
+            <TextField
+              id="workspace"
+              label="Workspace"
+              placeholder="Workspace URL"
+              margin="normal"
+            />
+          }
+          { (values.type === 'github') &&
+            <TextField
+              id="repository"
+              label="Repository"
+              placeholder="Repository URL"
+              margin="normal"
+            />
+          }
         </FormControl>
       }
       <div className={classes.buttons}>
