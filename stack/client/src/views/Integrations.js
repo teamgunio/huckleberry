@@ -20,11 +20,37 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const Integration = props => {
+  const classes = useStyles();
+
+  const { name, createdAt } = props
+
+  return (
+    <div className={classes.item}>
+      <div>{name}</div>
+      <div>{createdAt.toLocaleString()}</div>
+      <button>Reauthorize</button>
+      <button>Remove</button>
+    </div>
+  )
+}
+
 const Integrations = () => {
   const classes = useStyles();
 
   const [values, setValues] = React.useState({
-    integrations: [],
+    integrations: [{
+      id: 1,
+      type: 'github',
+      createdAt: new Date(),
+      name: 'GitHub',
+      user: {
+        id: 1,
+        username: 'dgraham',
+        firstName: 'Danny',
+        lastName: 'Graham',
+      }
+    }],
     newIntegration: false,
   });
 
@@ -48,7 +74,7 @@ const Integrations = () => {
         <div className={classes.list}>
           { values.integrations.length > 0 && 
             values.integrations.map(integration => (
-              <div>{integration.name}</div>
+              <Integration {...integration} />
             ))
           }
           { values.integrations.length === 0 && 
