@@ -57,6 +57,7 @@ steps:
   - 'DB_HOST=huckleberry-postgres'
   - 'DB_USERNAME=root'
   - 'DB_PASSWORD=root'
+  - 'DB_DATABASE=huckleberry_test'
 
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['run', 'test:e2e']
