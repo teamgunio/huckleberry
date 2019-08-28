@@ -2,10 +2,11 @@ version: "3"
 
 services:
   postgres:
-    image: postgres:10
+    image: postgres:11
     restart: always
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
+      POSTGRES_DB: huckleberry_test
     ports:
       - "5432:5432"

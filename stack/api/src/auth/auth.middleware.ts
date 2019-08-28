@@ -9,7 +9,6 @@ export interface ProcessEnv {
 const {
   AUTH0_DOMAIN,
   AUTH0_AUDIENCE,
-  AUTH0_CLIENT_ID,
 } = process.env;
 
 export class AuthMiddleware implements NestMiddleware {

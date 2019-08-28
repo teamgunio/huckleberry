@@ -32,6 +32,23 @@ spec:
           env:
             - name: PORT
               value: '5000'
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql
+                  key: DB_PASSWORD
+            - name: DB_PORT
+              value: '5432'
+            - name: DB_HOST
+              value: '10.7.144.3'
+            - name: DB_DATABASE
+              value: huckleberry-api
+            - name: AUTH0_DOMAIN
+              value: gun-io.auth0.com
+            - name: AUTH0_AUDIENCE
+              value: https://huckleberry.gun.io/api
           ports:
             - containerPort: 5000
           readinessProbe:
