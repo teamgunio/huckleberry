@@ -34,11 +34,12 @@ steps:
   dir: 'stack/client'
   secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
   env:
-  - 'NODE_ENV=test'
   - 'CI=true'
-  - 'REACT_APP_LOG_LEVEL=warn'
+  - 'NODE_ENV=test'
   - 'REACT_APP_API_BASE=/api'
+  - 'REACT_APP_AUTH0_AUDIENCE=https://huckleberry.gun.io/api'
   - 'REACT_APP_AUTH0_DOMAIN=gun-io.auth0.com'
+  - 'REACT_APP_LOG_LEVEL=warn'
 
 # Run Cypress e2e tests
 # - name: 'gcr.io/cloud-builders/yarn'
@@ -55,11 +56,12 @@ steps:
   dir: 'stack/client'
   secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
   env:
-  - 'NODE_ENV=production'
   - 'CI=true'
-  - 'REACT_APP_LOG_LEVEL=warn'
+  - 'NODE_ENV=production'
   - 'REACT_APP_API_BASE=/api'
+  - 'REACT_APP_AUTH0_AUDIENCE=https://huckleberry.gun.io/api'
   - 'REACT_APP_AUTH0_DOMAIN=gun-io.auth0.com'
+  - 'REACT_APP_LOG_LEVEL=warn'
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/huckleberry/client:$SHORT_SHA', '--cache-from', 'gcr.io/$PROJECT_ID/huckleberry/client:latest', '.']
