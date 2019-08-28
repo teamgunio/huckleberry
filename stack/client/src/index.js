@@ -9,6 +9,7 @@ import { Auth0Provider } from "./react-auth0-wrapper";
 const {
   NODE_ENV,
   REACT_APP_AUTH0_DOMAIN,
+  REACT_APP_AUTH0_AUDIENCE,
   REACT_APP_AUTH0_CLIENT_ID,
 } = process.env
 
@@ -35,6 +36,7 @@ ReactDOM.render(
     client_id={REACT_APP_AUTH0_CLIENT_ID}
     redirect_uri={window.location.origin}
     onRedirectCallback={onRedirectCallback}
+    audience={REACT_APP_AUTH0_AUDIENCE}
   >
     <App />
   </Auth0Provider>,

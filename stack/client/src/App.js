@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Router } from "react-router-dom";
 
 import openSocket from 'socket.io-client';
@@ -22,19 +22,19 @@ const { REACT_APP_API_BASE } = process.env;
 const AppContext = React.createContext('app');
 
 const AppComponent = (props) => {
-  const { apiVersion, ws, auth } = props
+  const { apiVersion, connect } = props
+  const [ isConnected, setIsConnected ] = useState(false)
   const {
     loading,
     isAuthenticated,
     accessToken,
-    // loginWithRedirect,
-    // logout
   } = useAuth0();
 
-  if (isAuthenticated && accessToken) {
-    ws()
-    auth(accessToken)
-  }
+  useEffect(() => {
+    if (!loading && isAuthenticated && !isConnected) {
+      connect(accessToken).then(authd => setIsConnected(authd))
+    }
+  })
 
   return (
     <Router history={history}>
@@ -70,11 +70,21 @@ class App extends Component {
     super(props);
     this.state = {
       apiVersion: null,
+      connected: false,
     };
   }
 
   componentDidMount() {
     this.load();
+  }
+
+  async connect(accessToken) {
+    const authd = await this.auth(accessToken);
+    if (authd) {
+      this.ws();
+    }
+
+    return authd
   }
 
   ws = () => {
@@ -89,15 +99,15 @@ class App extends Component {
 
   async auth(accessToken) {
     try {
-      const res = await fetch(`${REACT_APP_API_BASE}/auth`, {
+      await fetch(`${REACT_APP_API_BASE}/auth`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         }
       })
-      const authd = await res.text()
-      console.log(authd)
+      return true;
     } catch (err) {
       console.error(err);
+      return false;
     }
   }
 
@@ -116,9 +126,10 @@ class App extends Component {
 
   render() {
     const { apiVersion } = this.state
+
     return (
       <AppContext.Provider value={apiVersion}>
-        <AppComponent apiVersion={apiVersion} ws={this.ws} auth={this.auth} />
+        <AppComponent apiVersion={apiVersion} connect={this.connect.bind(this)} />
       </AppContext.Provider>
     );
   }

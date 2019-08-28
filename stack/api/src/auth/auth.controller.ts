@@ -2,11 +2,11 @@ import { Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from './user.entity';
 
-@Controller('/api/auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get()
+  @Get('/api/auth')
   findAll(): Promise<User[]> {
     return this.authService.findAll();
   }

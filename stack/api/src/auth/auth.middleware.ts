@@ -2,6 +2,10 @@ import { NestMiddleware } from '@nestjs/common';
 import * as jwt from 'express-jwt';
 import { expressJwtSecret } from 'jwks-rsa';
 
+export interface ProcessEnv {
+    [key: string]: string | undefined
+}
+
 const {
   AUTH0_DOMAIN,
   AUTH0_AUDIENCE,
@@ -17,9 +21,8 @@ export class AuthMiddleware implements NestMiddleware {
         jwksRequestsPerMinute: 5,
         jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
       }),
-
       audience: AUTH0_AUDIENCE,
-      issuer: `https://${AUTH0_DOMAIN}`,
+      issuer: `https://${AUTH0_DOMAIN}/`,
       algorithm: 'RS256',
     })(req, res, err => {
       if (err) {

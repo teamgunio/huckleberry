@@ -15,6 +15,6 @@ export class AuthService {
   }
 
   async authorize(): Promise<any> {
-    
+    return true
   }
 }
