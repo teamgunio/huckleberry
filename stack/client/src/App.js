@@ -28,11 +28,12 @@ const AppComponent = (props) => {
     loading,
     isAuthenticated,
     accessToken,
+    user,
   } = useAuth0();
 
   useEffect(() => {
     if (!loading && isAuthenticated && !isConnected) {
-      connect(accessToken).then(authd => setIsConnected(authd))
+      connect(accessToken, user).then(authd => setIsConnected(authd))
     }
   })
 
@@ -78,8 +79,8 @@ class App extends Component {
     this.load();
   }
 
-  async connect(accessToken) {
-    const authd = await this.auth(accessToken);
+  async connect(accessToken, user) {
+    const authd = await this.auth(accessToken, user);
     if (authd) {
       this.ws();
     }
@@ -97,13 +98,24 @@ class App extends Component {
     // })
   }
 
-  async auth(accessToken) {
+  async auth(accessToken, profile) {
     try {
-      await fetch(`${REACT_APP_API_BASE}/auth`, {
+      let res = await fetch(`${REACT_APP_API_BASE}/user`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         }
       })
+      let user = await res.json()
+      if (!user.id) {
+        res = await fetch(`${REACT_APP_API_BASE}/user`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ profile })
+        })
+      }
       return true;
     } catch (err) {
       console.error(err);

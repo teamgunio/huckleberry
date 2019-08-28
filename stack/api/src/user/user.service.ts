@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../user/user.entity';
+import { User } from './user.entity';
 
 @Injectable()
-export class AuthService {
+export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -14,12 +14,22 @@ export class AuthService {
     return await this.userRepository.find();
   }
 
-  async validate(subject: string): Promise<User | undefined> {
+  async fetch(subject: string): Promise<User> {
     let user = await this.userRepository.findOne({ subject });
     if (!user) {
       user = new User();
       user.subject = subject;
     }
     return user;
+  }
+
+  async update(subject: string, profile: any): Promise<User> {
+    let user = await this.fetch(subject);
+    if (!user.id) {
+      user.username = user.email = profile.email;
+      user.createdAt = new Date();
+      user = await this.userRepository.save(user);
+    }
+    return user
   }
 }

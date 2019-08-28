@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
+import { UserModule } from './user/user.module';
 
 const {
   DB_HOST,
@@ -31,6 +32,7 @@ const {
     }),
     EventsModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -40,7 +42,9 @@ export class AppModule {
     consumer
       .apply(AuthMiddleware)
       .forRoutes(
-        { path: '/api/auth', method: RequestMethod.GET }
+        { path: '/api/auth', method: RequestMethod.GET },
+        { path: '/api/user', method: RequestMethod.GET },
+        { path: '/api/user', method: RequestMethod.PUT },
       );
   }
 }

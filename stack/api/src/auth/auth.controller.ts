@@ -1,18 +1,13 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('/api/auth')
-  findAll(): Promise<User[]> {
-    return this.authService.findAll();
+  async validate(@Request() req): Promise<User> {
+    return this.authService.validate(req.user.sub);
   }
-
-  // @Post()
-  // validate(): Promise<User> {
-  //   return this.authService.authorize();
-  // }
 }

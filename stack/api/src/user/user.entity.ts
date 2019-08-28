@@ -8,11 +8,8 @@ export class User {
   @Column({ length: 50 })
   username: string;
 
-  @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  @Column({ length: 150 })
+  subject: string;
 
   @Column()
   email: string;
