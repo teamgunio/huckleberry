@@ -20,6 +20,29 @@ steps:
   - |
     docker pull gcr.io/$PROJECT_ID/huckleberry/api:latest || exit 0
 
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'run'
+  - '--network=cloudbuild'
+  - '-d'
+  - '-e=POSTGRES_USER=root'
+  - '-e=POSTGRES_PASSWORD=root'
+  - '-e=POSTGRES_DB=huckleberry_test'
+  - '-p=5432:5432'
+  - '--name=huckleberry-postgres'
+  - 'postgres:11'
+
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    docker run \
+    --network=cloudbuild \
+    --name=alpine-check \
+    alpine:latest \
+    sh -c 'while ! nc -v -z huckleberry-postgres 5432; do echo -e "\033[92m  ---> waiting for postgres ... \033[0m"; sleep 1; done'
+
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['install']
   dir: 'stack/api'
@@ -27,6 +50,13 @@ steps:
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['test']
   dir: 'stack/api'
+  env:
+  - 'PORT=3001'
+  - 'AUTH0_DOMAIN=gun-io.auth0.com'
+  - 'AUTH0_AUDIENCE=https://huckleberry.gun.io/api'
+  - 'DB_HOST=huckleberry-postgres'
+  - 'DB_USERNAME=root'
+  - 'DB_PASSWORD=root'
 
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['run', 'test:e2e']
