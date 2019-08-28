@@ -9,6 +9,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
 import { UserModule } from './user/user.module';
+import { IntegrationModule } from './integration/integration.module';
 
 const {
   DB_HOST,
@@ -33,6 +34,7 @@ const {
     EventsModule,
     AuthModule,
     UserModule,
+    IntegrationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
