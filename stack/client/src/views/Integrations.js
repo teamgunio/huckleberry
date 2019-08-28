@@ -74,7 +74,7 @@ const Integrations = () => {
         <div className={classes.list}>
           { values.integrations.length > 0 && 
             values.integrations.map(integration => (
-              <Integration {...integration} />
+              <Integration {...integration} key={integration.id} />
             ))
           }
           { values.integrations.length === 0 && 

@@ -22,16 +22,18 @@ const { REACT_APP_API_BASE } = process.env;
 const AppContext = React.createContext('app');
 
 const AppComponent = (props) => {
-  const { apiVersion, ws } = props
+  const { apiVersion, ws, auth } = props
   const {
     loading,
     isAuthenticated,
+    accessToken,
     // loginWithRedirect,
     // logout
   } = useAuth0();
 
-  if (isAuthenticated) {
+  if (isAuthenticated && accessToken) {
     ws()
+    auth(accessToken)
   }
 
   return (
@@ -85,6 +87,20 @@ class App extends Component {
     // })
   }
 
+  async auth(accessToken) {
+    try {
+      const res = await fetch(`${REACT_APP_API_BASE}/auth`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      })
+      const authd = await res.text()
+      console.log(authd)
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async load() {
     try {
       const res = await fetch(`${REACT_APP_API_BASE}/version`)
@@ -102,7 +118,7 @@ class App extends Component {
     const { apiVersion } = this.state
     return (
       <AppContext.Provider value={apiVersion}>
-        <AppComponent apiVersion={apiVersion} ws={this.ws}/>
+        <AppComponent apiVersion={apiVersion} ws={this.ws} auth={this.auth} />
       </AppContext.Provider>
     );
   }
