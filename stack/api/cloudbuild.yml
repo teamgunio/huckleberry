@@ -51,17 +51,27 @@ steps:
   args: ['test']
   dir: 'stack/api'
   env:
-  - 'PORT=3001'
-  - 'AUTH0_DOMAIN=gun-io.auth0.com'
   - 'AUTH0_AUDIENCE=https://huckleberry.gun.io/api'
-  - 'DB_HOST=huckleberry-postgres'
-  - 'DB_USERNAME=root'
-  - 'DB_PASSWORD=root'
+  - 'AUTH0_DOMAIN=gun-io.auth0.com'
   - 'DB_DATABASE=huckleberry_test'
+  - 'DB_HOST=huckleberry-postgres'
+  - 'DB_PASS=root'
+  - 'DB_PORT=5432'
+  - 'DB_USER=root'
+  - 'PORT=3001'
 
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['run', 'test:e2e']
   dir: 'stack/api'
+  env:
+  - 'AUTH0_AUDIENCE=https://huckleberry.gun.io/api'
+  - 'AUTH0_DOMAIN=gun-io.auth0.com'
+  - 'DB_DATABASE=huckleberry_test'
+  - 'DB_HOST=huckleberry-postgres'
+  - 'DB_PASS=root'
+  - 'DB_PORT=5432'
+  - 'DB_USER=root'
+  - 'PORT=3001'
 
 - name: 'gcr.io/cloud-builders/yarn'
   args: ['build']
