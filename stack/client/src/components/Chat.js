@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+
+import { SocketProvider, useSocket } from '../contexts/socket';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +49,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const ChatMessages = () => {
+  const classes = useStyles();
+  const { socket } = useSocket();
+  
+  useEffect(() => {
+    if (socket) {
+      socket.on('messages', res => console.log('message', res));
+    }
+  }, [socket])
+
+  return (
+    <div className={classes.messages}>
+      <div className={classes.header}>
+        <Typography variant="h6">Talk to the Doc</Typography>
+      </div>
+      <ChatMessage />
+    </div>
+  )
+}
+
 const ChatMessage = () => {
   const classes = useStyles();
 
@@ -62,6 +84,12 @@ const ChatMessage = () => {
 
 const ChatInput = () => {
   const classes = useStyles();
+  const { socket } = useSocket();
+
+  const sendMessage = (event) => {
+    const body = event.target.value
+    socket.emit('messages', { body });
+  }
 
   return (
     <div className={classes.chat}>
@@ -69,7 +97,14 @@ const ChatInput = () => {
         className={classes.input}
         margin="dense"
         variant="outlined"
-        placeholder="Chat" />
+        placeholder="Chat"
+        onKeyPress={(ev) => {
+          if (ev.key === 'Enter') {
+            sendMessage(ev);
+            ev.preventDefault();
+          }
+        }}
+      />
     </div>
   )
 }
@@ -78,17 +113,14 @@ const Chat = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <div className={classes.messages}>
-          <div className={classes.header}>
-            <Typography variant="h6">Talk to the Doc</Typography>
-          </div>
-          <ChatMessage />
-        </div>
-        <ChatInput />
-      </Paper>
-    </div>
+    <SocketProvider>
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <ChatMessages />
+          <ChatInput />
+        </Paper>
+      </div>
+    </SocketProvider>
   );
 };
 

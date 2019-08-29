@@ -1,11 +1,10 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Router } from "react-router-dom";
 
-import openSocket from 'socket.io-client';
 import { version } from '../package.json';
 
-import { useAuth0 } from "./react-auth0-wrapper";
-import history from "./history";
+import history from './history';
+import { useAuth0 } from './react-auth0-wrapper';
 
 import Loading from './components/Loading';
 import NavBar from './components/NavBar';
@@ -81,21 +80,7 @@ class App extends Component {
 
   async connect(accessToken, user) {
     const authd = await this.auth(accessToken, user);
-    if (authd) {
-      this.ws();
-    }
-
     return authd
-  }
-
-  ws = () => {
-    const socket = openSocket(`${REACT_APP_API_BASE}/rtm/events`, { path: '/api/rtm' });
-    socket.on('events', res => console.log('event',res));
-    // socket.on('connect', () => {
-    //   setInterval(() => {
-    //     socket.emit('events', { test: 'test' });
-    //   }, 1000)
-    // })
   }
 
   async auth(accessToken, profile) {
