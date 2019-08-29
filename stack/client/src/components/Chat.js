@@ -3,9 +3,11 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { SocketProvider, useSocket } from '../contexts/socket';
+import { useAuth0 } from '../contexts/auth0';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,6 +35,8 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     float: 'left',
     marginRight: theme.spacing(1),
+    width: '40px',
+    height: '40px',
   },
   user: {
     float: 'left',
@@ -52,9 +56,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChatMessages = () => {
+const ChatContainer = () => {
   const classes = useStyles();
   const { socket } = useSocket();
+  const { user } = useAuth0();
   const [messages, setMessages] = useState([{
     avatar: null,
     user: `Doc`,
@@ -72,6 +77,36 @@ const ChatMessages = () => {
       });
     }
   }, [socket, messages])
+
+  const sendMessage = (event) => {
+    const body = event.target.value
+    console.log(user)
+    const message = {
+      user: user.name,
+      avatar: user.picture,
+      body,
+      timestamp: (new Date()).toLocaleString(),
+    }
+    socket.emit('messages', message);
+    setMessages([
+      ...messages,
+      message,
+    ]);
+  }
+
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <ChatMessages messages={messages}/>
+        <ChatInput onSend={sendMessage}/>
+      </Paper>
+    </div>
+  )
+}
+
+const ChatMessages = props => {
+  const classes = useStyles();
+  const { messages } = props;
 
   return (
     <div className={classes.messages}>
@@ -96,8 +131,12 @@ const ChatMessage = props => {
 
   return (
     <div className={classes.message}>
-      <div className={classes.avatar}>
-        { !avatar && <AccountCircle /> }
+      <div>
+        { (avatar) ?
+          <Avatar src={avatar} className={classes.avatar} />
+          :
+          <AccountCircle className={classes.avatar} />
+        }
       </div>
       <div className={classes.user}>{user}</div>
       <div className={classes.timestamp}>{timestamp}</div>
@@ -106,14 +145,9 @@ const ChatMessage = props => {
   )
 }
 
-const ChatInput = () => {
+const ChatInput = props => {
   const classes = useStyles();
-  const { socket } = useSocket();
-
-  const sendMessage = (event) => {
-    const body = event.target.value
-    socket.emit('messages', { body });
-  }
+  const { onSend } = props;
 
   return (
     <div className={classes.chat}>
@@ -124,7 +158,7 @@ const ChatInput = () => {
         placeholder="Chat"
         onKeyPress={(ev) => {
           if (ev.key === 'Enter') {
-            sendMessage(ev);
+            onSend(ev);
             ev.target.value = '';
             ev.preventDefault();
           }
@@ -135,16 +169,9 @@ const ChatInput = () => {
 }
 
 const Chat = () => {
-  const classes = useStyles();
-
   return (
     <SocketProvider>
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <ChatMessages />
-          <ChatInput />
-        </Paper>
-      </div>
+      <ChatContainer />
     </SocketProvider>
   );
 };
