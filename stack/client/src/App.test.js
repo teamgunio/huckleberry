@@ -1,7 +1,7 @@
 import React from 'react';
 import TestRenderer from "react-test-renderer";
 
-import { Auth0Context } from "./react-auth0-wrapper";
+import { Auth0Context } from "./contexts/auth0";
 import App from './App';
 
 it('renders without crashing', () => {
