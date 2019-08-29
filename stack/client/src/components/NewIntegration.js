@@ -22,10 +22,12 @@ const useStyles = makeStyles(theme => ({
 const NewIntegration = props => {
   const classes = useStyles();
 
-  const { onCancel } = props;
+  const { onCancel, onSave } = props;
 
   const [values, setValues] = React.useState({
     type: '',
+    workspace: '',
+    repository: '',
   });
 
   const handleChange = (event) => {
@@ -33,6 +35,10 @@ const NewIntegration = props => {
       ...oldValues,
       [event.target.name]: event.target.value,
     }));
+  };
+
+  const handleTextChange = name => event => {
+    setValues({ ...values, [name]: event.target.value });
   };
 
   return (
@@ -47,7 +53,7 @@ const NewIntegration = props => {
             name: 'type',
             id: 'type-simple',
           }}
-          margin="normal"
+          margin="dense"
         >
           <MenuItem value="slack">Slack</MenuItem>
           <MenuItem value="jira">JIRA</MenuItem>
@@ -58,6 +64,7 @@ const NewIntegration = props => {
         <FormControl className={classes.formControl}>
           { (values.type === 'slack' || values.type === 'jira') &&
             <TextField
+              onChange={handleTextChange('workspace')}
               id="workspace"
               label="Workspace"
               placeholder="Workspace URL"
@@ -66,6 +73,7 @@ const NewIntegration = props => {
           }
           { (values.type === 'github') &&
             <TextField
+              onChange={handleTextChange('repository')}
               id="repository"
               label="Repository"
               placeholder="Repository URL"
@@ -75,8 +83,15 @@ const NewIntegration = props => {
         </FormControl>
       }
       <div className={classes.buttons}>
-        <Button color="primary" disabled={values.type === ''}>Authorize</Button>
-        <Button color="primary" onClick={onCancel}>Cancel</Button>
+        <Button
+          color="primary"
+          disabled={values.type === ''}
+          onClick={() => onSave(values)}
+        >Authorize</Button>
+        <Button
+          color="primary"
+          onClick={onCancel}
+        >Cancel</Button>
       </div>
     </div>
   );

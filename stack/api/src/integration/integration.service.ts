@@ -13,4 +13,12 @@ export class IntegrationService {
   async findAll(): Promise<Integration[]> {
     return await this.integrationRepository.find();
   }
+
+  async create(user: any, props: any): Promise<Integration> {
+    const integration = new Integration();
+    integration.type = integration.name = props.type;
+    integration.user = user.sub;
+    integration.createdAt = new Date();
+    return await this.integrationRepository.save(integration);
+  }
 }
