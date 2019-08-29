@@ -25,10 +25,21 @@ spec:
       labels:
         name: huckleberry-api
     spec:
+      volumes:
+      - name: dialogflow-credentials-volume
+        secret:
+          secretName: dialogflow-credentials
+          items:
+          - key: credentials.json
+            path: dialogflow-credentials.json
       containers:
         - name: huckleberry-api
           image: gcr.io/gunio-tools/huckleberry/api:latest
           imagePullPolicy: Always
+          volumeMounts:
+          - name: dialogflow-credentials-volume
+            mountPath: /var/secrets
+            readOnly: true
           env:
             - name: AUTH0_AUDIENCE
               value: 'https://huckleberry.gun.io/api'
@@ -49,6 +60,8 @@ spec:
               value: postgres
             - name: PORT
               value: '5000'
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/dialogflow-credentials.json
           ports:
             - containerPort: 5000
           readinessProbe:
