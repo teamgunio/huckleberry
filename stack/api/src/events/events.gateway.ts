@@ -7,7 +7,7 @@ import {
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Client, Server } from 'socket.io';
-
+import { EventsService } from './events.service';
 
 export interface Message {
   [body: string]: string;
@@ -18,14 +18,16 @@ export interface Message {
 
 @WebSocketGateway({ namespace: 'api/rtm/events', path: '/api/rtm' })
 export class EventsGateway {
+  constructor(private readonly eventsService: EventsService) {}
+
   @WebSocketServer()
   server: Server;
 
   @SubscribeMessage('messages')
-  latestMessages(client: Client, data: any): Observable<WsResponse<Message>> {
-    const body:string = `You said, "${data.body}"`;
+  async latestMessages(client: Client, data: any) {
+    const reply = await this.eventsService.detectIntent(data.body);
     const msg:Message = {
-      body,
+      body: reply,
       user: 'Doc',
       avatar: null,
       timestamp: (new Date()).toLocaleString(),
