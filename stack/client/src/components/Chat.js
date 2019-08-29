@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     padding: theme.spacing(1),
   },
+  message: {
+    marginBottom: theme.spacing(1),
+  },
   avatar: {
     float: 'left',
     marginRight: theme.spacing(1),
@@ -52,32 +55,53 @@ const useStyles = makeStyles(theme => ({
 const ChatMessages = () => {
   const classes = useStyles();
   const { socket } = useSocket();
+  const [messages, setMessages] = useState([{
+    avatar: null,
+    user: `Doc`,
+    body: `Hey, what's up`,
+    timestamp: (new Date()).toLocaleString(),
+  }])
   
   useEffect(() => {
     if (socket) {
-      socket.on('messages', res => console.log('message', res));
+      socket.on('messages', res => {
+        setMessages([
+          ...messages,
+          res
+        ])
+      });
     }
-  }, [socket])
+  }, [socket, messages])
 
   return (
     <div className={classes.messages}>
       <div className={classes.header}>
         <Typography variant="h6">Talk to the Doc</Typography>
       </div>
-      <ChatMessage />
+      {messages.map((message, i) => (
+        <ChatMessage key={`msg-${i}`} message={message} />
+      ))}
     </div>
   )
 }
 
-const ChatMessage = () => {
+const ChatMessage = props => {
   const classes = useStyles();
+  const {
+    avatar,
+    user,
+    body,
+    timestamp,
+  } = props.message
 
   return (
     <div className={classes.message}>
-      <div className={classes.avatar}><AccountCircle /></div>
-      <div className={classes.user}>Doc</div>
-      <div className={classes.timestamp}>08:00 PST</div>
-      <div className={classes.body}>Hey what's up</div>
+      <div className={classes.avatar}>
+        { !avatar && <AccountCircle /> }
+      </div>
+      <div className={classes.user}>{user}</div>
+      <div className={classes.timestamp}>{timestamp}</div>
+      <div className={classes.body}>{body}</div>
     </div>
   )
 }
@@ -101,6 +125,7 @@ const ChatInput = () => {
         onKeyPress={(ev) => {
           if (ev.key === 'Enter') {
             sendMessage(ev);
+            ev.target.value = '';
             ev.preventDefault();
           }
         }}

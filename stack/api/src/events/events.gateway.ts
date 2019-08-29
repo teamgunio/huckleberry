@@ -10,8 +10,10 @@ import { Client, Server } from 'socket.io';
 
 
 export interface Message {
-  [body: string]: string,
-  // [body: string]: string | undefined,
+  [body: string]: string;
+  user: string;
+  avatar: string | undefined;
+  timestamp: string;
 }
 
 @WebSocketGateway({ namespace: 'api/rtm/events', path: '/api/rtm' })
@@ -24,6 +26,9 @@ export class EventsGateway {
     const body:string = `You said, "${data.body}"`;
     const msg:Message = {
       body,
+      user: 'Doc',
+      avatar: null,
+      timestamp: (new Date()).toLocaleString(),
     };
     return from([msg]).pipe(map(item => ({ event: 'messages', data: item })));
   }
