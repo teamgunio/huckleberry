@@ -15,14 +15,7 @@ export const SocketProvider = ({
   useEffect(() => {
     const initSocket = async () => {
       if (websocket) return
-
       websocket = openSocket(`${REACT_APP_API_BASE}/rtm/events`, { path: '/api/rtm' });
-      // websocket.on('events', res => console.log('event',res));
-      // websocket.on('connect', () => {
-      //   setInterval(() => {
-      //     websocket.emit('events', { test: 'test' });
-      //   }, 1000)
-      // })
       setSocket(websocket)
     };
     initSocket();
