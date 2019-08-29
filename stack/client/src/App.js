@@ -4,7 +4,7 @@ import { Router } from "react-router-dom";
 import { version } from '../package.json';
 
 import history from './history';
-import { useAuth0 } from './react-auth0-wrapper';
+import { useAuth0 } from './contexts/auth0';
 
 import Loading from './components/Loading';
 import NavBar from './components/NavBar';

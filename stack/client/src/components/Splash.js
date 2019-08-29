@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useAuth0 } from "../react-auth0-wrapper";
+import { useAuth0 } from "../contexts/auth0";
 
 const useStyles = makeStyles(theme => ({
   splash: {

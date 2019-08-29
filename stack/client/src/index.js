@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { Auth0Provider } from "./react-auth0-wrapper";
+import { Auth0Provider } from "./contexts/auth0";
 
 const {
   NODE_ENV,
