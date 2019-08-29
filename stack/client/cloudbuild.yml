@@ -25,11 +25,11 @@ steps:
   - |
     docker pull gcr.io/$PROJECT_ID/huckleberry/client:latest || exit 0
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['install']
   dir: 'stack/client'
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['test']
   dir: 'stack/client'
   secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
@@ -42,7 +42,7 @@ steps:
   - 'REACT_APP_LOG_LEVEL=warn'
 
 # Run Cypress e2e tests
-# - name: 'gcr.io/cloud-builders/yarn:current'
+# - name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
 #   args: ['run', 'test:e2e']
 #   dir: 'stack/client'
 #   env:
@@ -51,7 +51,7 @@ steps:
 #   - 'REACT_APP_LOG_LEVEL=warn'
 #   - 'REACT_APP_API_BASE=/api'
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['build']
   dir: 'stack/client'
   secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']

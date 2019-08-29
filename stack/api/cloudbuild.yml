@@ -43,11 +43,11 @@ steps:
     alpine:latest \
     sh -c 'while ! nc -v -z huckleberry-postgres 5432; do echo -e "\033[92m  ---> waiting for postgres ... \033[0m"; sleep 1; done'
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['install']
   dir: 'stack/api'
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['test']
   dir: 'stack/api'
   env:
@@ -60,7 +60,7 @@ steps:
   - 'DB_USER=root'
   - 'PORT=3001'
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['run', 'test:e2e']
   dir: 'stack/api'
   env:
@@ -73,7 +73,7 @@ steps:
   - 'DB_USER=root'
   - 'PORT=3001'
 
-- name: 'gcr.io/cloud-builders/yarn:current'
+- name: 'gcr.io/cloud-builders/yarn:node-10.10.0'
   args: ['build']
   dir: 'stack/api'
 
