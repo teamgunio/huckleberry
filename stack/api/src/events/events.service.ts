@@ -18,18 +18,24 @@ export class EventsService {
     const projectId = 'gunio-tools';
     const sessionId = 'asdflajksdflkasjdflkajsdfl';
     const languageCode = 'en';
-    const sessionPath = sessionClient.sessionPath(projectId, sessionId);
-    const request = {
-      session: sessionPath,
-      queryInput: {
-        text: {
-          text: query,
-          languageCode: languageCode,
+
+    try {
+      const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+      const request = {
+        session: sessionPath,
+        queryInput: {
+          text: {
+            text: query,
+            languageCode: languageCode,
+          },
         },
-      },
-    };
-    const [response] = await sessionClient.detectIntent(request);
-    const { fulfillmentText } = response.queryResult;
-    return fulfillmentText;
+      };
+      const [response] = await sessionClient.detectIntent(request);
+      const { fulfillmentText } = response.queryResult;
+      return fulfillmentText;
+    } catch (err) {
+      console.log(err);
+      return `Y'know, I'm gonna have to get back to you - I'm having issues.`
+    }
   }
 }
