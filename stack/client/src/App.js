@@ -38,29 +38,29 @@ const AppComponent = (props) => {
 
   return (
     <Router history={history}>
-    <div className="App">
-      <header className="App-header">
-        <div className="App-banner">
-          <img src={logo} className="App-logo" alt="logo" />
-          <div className="App-label">Huckleberry</div>
-        </div>
-        <NavBar/>
-      </header>
-      <main className="App-main">
-        { loading && <Loading /> }
-        { !isAuthenticated && <Splash /> }
-        { isAuthenticated && <Dashboard /> }
-      </main>
-      <footer className="App-footer">
-        <div className="App-info">
-          <div className="copywrite">&copy; 2019 Gun.io, Inc.</div>
-          <div className="version">
-            Client v{version}
-            { apiVersion && ` | Server v${apiVersion}` }
+      <div className="App">
+        <header className="App-header">
+          <div className="App-banner">
+            <img src={logo} className="App-logo" alt="logo" />
+            <div className="App-label">Huckleberry</div>
           </div>
-        </div>
-      </footer>
-    </div>
+          <NavBar/>
+        </header>
+        <main className="App-main">
+          { loading && <Loading /> }
+          { !isAuthenticated && <Splash /> }
+          { isAuthenticated && <Dashboard /> }
+        </main>
+        <footer className="App-footer">
+          <div className="App-info">
+            <div className="copywrite">&copy; 2019 Gun.io, Inc.</div>
+            <div className="version">
+              Client v{version}
+              { apiVersion && ` | Server v${apiVersion}` }
+            </div>
+          </div>
+        </footer>
+      </div>
     </Router>
   );
 };

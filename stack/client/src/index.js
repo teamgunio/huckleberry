@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { Auth0Provider } from "./contexts/auth0";
+import { OAuthProvider } from "./contexts/oauth";
 
 const {
   NODE_ENV,
@@ -26,7 +27,7 @@ const onRedirectCallback = appState => {
     document.title,
     appState && appState.targetUrl
       ? appState.targetUrl
-      : window.location.pathname
+      : '/' //window.location.pathname
   );
 };
 
@@ -34,11 +35,13 @@ ReactDOM.render(
   <Auth0Provider
     domain={REACT_APP_AUTH0_DOMAIN}
     client_id={REACT_APP_AUTH0_CLIENT_ID}
-    redirect_uri={window.location.origin}
+    redirect_uri={`${window.location.origin}/auth/callback`}
     onRedirectCallback={onRedirectCallback}
     audience={REACT_APP_AUTH0_AUDIENCE}
   >
-    <App />
+    <OAuthProvider>
+      <App />
+    </OAuthProvider>
   </Auth0Provider>,
   document.getElementById('root')
 );

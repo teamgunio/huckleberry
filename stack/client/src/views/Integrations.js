@@ -7,7 +7,10 @@ import { useAuth0 } from "../contexts/auth0";
 import EmptyList from '../components/EmptyList';
 import NewIntegration from '../components/NewIntegration';
 
-const { REACT_APP_API_BASE } = process.env;
+const {
+  REACT_APP_API_BASE,
+  REACT_APP_GITHUB_CLIENT_ID,
+} = process.env;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,7 +47,19 @@ const NewIntegrationButton = props => {
 const Integration = props => {
   const classes = useStyles();
 
-  const { name, workspace, repository, createdAt } = props
+  const { type, name, workspace, repository, createdAt } = props
+
+  const authorize = () => {
+    switch(type) {
+      case 'github':
+        let uri = `https://github.com/login/oauth/authorize`
+        let redirect = `${window.location.origin}/integrations/callback`
+        window.location = `${uri}?login&redirect_uri=${redirect}&client_id=${REACT_APP_GITHUB_CLIENT_ID}`
+      break;
+      default:
+
+    }
+  }
 
   return (
     <div className={classes.item} title={`${name} Integration Added ${createdAt.toLocaleString()}`}>
@@ -53,7 +68,7 @@ const Integration = props => {
         { repository && `Repository: ${repository}` }
         { workspace && `Workspace: ${workspace}` }
       </div>
-      <Button>Reauthorize</Button>
+      <Button onClick={authorize}>Reauthorize</Button>
       <Button color="secondary">Remove</Button>
     </div>
   )

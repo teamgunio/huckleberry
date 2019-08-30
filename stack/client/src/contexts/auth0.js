@@ -23,7 +23,8 @@ export const Auth0Provider = ({
       const auth0FromHook = await createAuth0Client(initOptions);
       setAuth0(auth0FromHook);
 
-      if (window.location.search.includes("code=")) {
+      const { pathname, search } = window.location;
+      if (pathname === '/auth/callback' && search.includes("code=")) {
         const { appState } = await auth0FromHook.handleRedirectCallback();
         onRedirectCallback(appState);
       }
