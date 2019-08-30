@@ -8,6 +8,9 @@ import { startOAuthFlow, useOAuth } from '../contexts/oauth';
 import EmptyList from '../components/EmptyList';
 import NewIntegration from '../components/NewIntegration';
 
+import SimpleIcon from '../components/SimpleIcon';
+import GitHubIcon from 'simple-icons/icons/github';
+
 const {
   REACT_APP_API_BASE,
 } = process.env;
@@ -28,6 +31,13 @@ const useStyles = makeStyles(theme => ({
   item: {
     display: 'flex',
   },
+  itemInfo: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: theme.spacing(1),
+  },
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -40,7 +50,7 @@ const NewIntegrationButton = props => {
     <Button
       color="primary"
       onClick={onClick}
-    >New Integration</Button>
+    >Add Integration</Button>
   )
 }
 
@@ -53,8 +63,6 @@ const Integration = props => {
   const {
     type,
     name,
-    workspace,
-    repository,
     createdAt,
   } = integration;
 
@@ -64,10 +72,14 @@ const Integration = props => {
 
   return (
     <div className={classes.item} title={`${name} Integration Added ${createdAt.toLocaleString()}`}>
-      <div>
-        Service: {name}
-        { repository && `Repository: ${repository}` }
-        { workspace && `Workspace: ${workspace}` }
+      <div className={classes.itemInfo}>
+        {type === 'github' &&
+          <Fragment>
+            <SimpleIcon path={GitHubIcon.path} size={24} className={classes.icon}/>
+            GitHub
+          </Fragment>
+        }
+        {type !== 'github' && name }
       </div>
       <Button onClick={authorize}>Reauthorize</Button>
       <Button color="secondary">Remove</Button>

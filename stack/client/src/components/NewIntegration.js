@@ -57,32 +57,30 @@ const NewIntegration = props => {
           }}
           margin="dense"
         >
-          <MenuItem value="slack">Slack</MenuItem>
-          <MenuItem value="jira">JIRA</MenuItem>
           <MenuItem value="github">GitHub</MenuItem>
         </Select>
       </FormControl>
-      { values.type !== '' &&
-        <FormControl className={classes.formControl}>
-          { (values.type === 'slack' || values.type === 'jira') &&
-            <TextField
-              onChange={handleTextChange('workspace')}
-              id="workspace"
-              label="Workspace"
-              placeholder="Workspace URL"
-              margin="normal"
-            />
-          }
-          { (values.type === 'github') &&
-            <TextField
-              onChange={handleTextChange('repository')}
-              id="repository"
-              label="Repository"
-              placeholder="Repository URL"
-              margin="normal"
-            />
-          }
-        </FormControl>
+      {// values.type !== '' &&
+      //   <FormControl className={classes.formControl}>
+      //     { (values.type === 'slack' || values.type === 'jira') &&
+      //       <TextField
+      //         onChange={handleTextChange('workspace')}
+      //         id="workspace"
+      //         label="Workspace"
+      //         placeholder="Workspace URL"
+      //         margin="normal"
+      //       />
+      //     }
+      //     { (values.type === 'github') &&
+      //       <TextField
+      //         onChange={handleTextChange('repository')}
+      //         id="repository"
+      //         label="Repository"
+      //         placeholder="Repository URL"
+      //         margin="normal"
+      //       />
+      //     }
+      //   </FormControl>
       }
       <div className={classes.buttons}>
         <Button
