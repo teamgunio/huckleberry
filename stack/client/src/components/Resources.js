@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 const Resources = () => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState('integrations');
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

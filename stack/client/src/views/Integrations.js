@@ -1,6 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { useAuth0 } from "../contexts/auth0";
 import { startOAuthFlow, useOAuth } from '../contexts/oauth';
@@ -89,6 +92,8 @@ const Integration = props => {
 
 const Integrations = () => {
   const classes = useStyles();
+  const [snackbar, setSnackbar] = React.useState(false);
+
   const {
     accessToken,
   } = useAuth0();
@@ -127,6 +132,7 @@ const Integrations = () => {
         body: JSON.stringify({ code })
       })
       setPendingIntegration(null);
+      setSnackbar(true);
     }
     if (pendingIntegration && accessToken) onAuthorized(pendingIntegration);
   }, [accessToken, pendingIntegration, setPendingIntegration, code])
@@ -150,6 +156,14 @@ const Integrations = () => {
 
   const cancelAddIntegration = () => {
     setNewIntegration(false)
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar(false);
   }
 
   return (
@@ -178,6 +192,30 @@ const Integrations = () => {
           <NewIntegration onCancel={cancelAddIntegration} onSave={saveIntegration}/>
         </div>
       }
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        message={<span id="message-id">Integration Authorized</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="close"
+            color="inherit"
+            className={classes.close}
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      />
     </div>
   );
 };
