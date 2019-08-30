@@ -3,13 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import { useAuth0 } from "../contexts/auth0";
+import { startOAuthFlow, useOAuth } from '../contexts/oauth';
 
 import EmptyList from '../components/EmptyList';
 import NewIntegration from '../components/NewIntegration';
 
 const {
   REACT_APP_API_BASE,
-  REACT_APP_GITHUB_CLIENT_ID,
 } = process.env;
 
 const useStyles = makeStyles(theme => ({
@@ -46,19 +46,20 @@ const NewIntegrationButton = props => {
 
 const Integration = props => {
   const classes = useStyles();
+  const {
+    integration,
+  } = props;
 
-  const { type, name, workspace, repository, createdAt } = props
+  const {
+    type,
+    name,
+    workspace,
+    repository,
+    createdAt,
+  } = integration;
 
   const authorize = () => {
-    switch(type) {
-      case 'github':
-        let uri = `https://github.com/login/oauth/authorize`
-        let redirect = `${window.location.origin}/integrations/callback`
-        window.location = `${uri}?login&redirect_uri=${redirect}&client_id=${REACT_APP_GITHUB_CLIENT_ID}`
-      break;
-      default:
-
-    }
+    startOAuthFlow(type, integration);
   }
 
   return (
@@ -80,21 +81,14 @@ const Integrations = () => {
     accessToken,
   } = useAuth0();
 
+  const {
+    code,
+    pendingIntegration,
+    setPendingIntegration,
+  } = useOAuth();
+
   const [newIntegration, setNewIntegration] = useState(false);
-  const [integrations, setIntegrations] = useState([
-    // {
-    //   id: 1,
-    //   type: 'github',
-    //   createdAt: new Date(),
-    //   name: 'GitHub',
-    //   user: {
-    //     id: 1,
-    //     username: 'dgraham',
-    //     firstName: 'Danny',
-    //     lastName: 'Graham',
-    //   }
-    // },
-  ])
+  const [integrations, setIntegrations] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,6 +102,22 @@ const Integrations = () => {
     }
     if (accessToken) fetchData();
   }, [accessToken])
+
+  useEffect(() => {
+    const onAuthorized = async (integration) => {
+      // const uri = `${REACT_APP_API_BASE}/integrations/:${integration.id}/authorize`
+      // await fetch(uri, {
+      //   method: 'Post',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${accessToken}`,
+      //   },
+      //   body: JSON.stringify({ code })
+      // })
+      setPendingIntegration(null);
+    }
+    if (pendingIntegration && accessToken) onAuthorized(pendingIntegration);
+  }, [accessToken, pendingIntegration, setPendingIntegration, code])
 
   const saveIntegration = async (integration) => {
     const uri = integration.id ? `${REACT_APP_API_BASE}/integrations/:${integration.id}` : `${REACT_APP_API_BASE}/integrations`
@@ -137,7 +147,7 @@ const Integrations = () => {
           { integrations.length > 0 && 
             <Fragment>
               {integrations.map(integration => (
-                <Integration {...integration} key={integration.id} />
+                <Integration integration={integration} key={integration.id} />
               ))}
               <NewIntegrationButton onClick={addIntegration}/>
             </Fragment>
