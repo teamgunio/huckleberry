@@ -9,6 +9,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { SocketProvider, useSocket } from '../contexts/socket';
 import { useAuth0 } from '../contexts/auth0';
 
+import { handleMessage } from '../services/workflow.js';
+
 const useStyles = makeStyles(theme => ({
   root: {
     flex: 1,
@@ -65,22 +67,26 @@ const ChatContainer = () => {
     user: `Doc`,
     body: `Hey, what's up`,
     timestamp: (new Date()).toLocaleString(),
-  }])
+  }]);
   
   useEffect(() => {
-    if (socket) {
-      socket.on('messages', res => {
-        setMessages([
-          ...messages,
-          res
-        ])
-      });
+    const onMessage = async (message) => {
+      handleMessage(message);
+      setMessages([
+        ...messages,
+        message
+      ]);
     }
-  }, [socket, messages])
+
+    if (socket) socket.on('messages', onMessage);
+
+    return function cleanup() {
+      if (socket) socket.removeListener('messages', onMessage);
+    }
+  }, [socket, messages]);
 
   const sendMessage = (event) => {
     const body = event.target.value
-    console.log(user)
     const message = {
       user: user.name,
       avatar: user.picture,

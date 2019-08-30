@@ -12,9 +12,9 @@ export class IntegrationController {
   }
 
   @Post('/api/integrations')
-  async create(@Request() req): Promise<string> {
-    await this.integrationService.create(req.user, req.body.integration);
-    return 'ok';
+  async create(@Request() req): Promise<Integration> {
+    const integration = await this.integrationService.create(req.user, req.body.integration);
+    return integration;
   }
 
   @Post('/api/integrations/:id/authorize')

@@ -6,7 +6,7 @@ const {
 
 const { localStorage } = window
 
-export const startOAuthFlow = (type, integration, callback) => {
+export const startOAuthFlow = (type, integration) => {
   localStorage.setItem('pendingIntegration', JSON.stringify(integration))
 
   switch(type) {

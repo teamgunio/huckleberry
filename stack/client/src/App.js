@@ -15,6 +15,7 @@ import Dashboard from './views/Dashboard';
 import logo from './logo.svg';
 import './App.css';
 
+import { setAuthToken } from './services/api';
 
 const { REACT_APP_API_BASE } = process.env;
 
@@ -32,7 +33,8 @@ const AppComponent = (props) => {
 
   useEffect(() => {
     if (!loading && isAuthenticated && !isConnected) {
-      connect(accessToken, user).then(authd => setIsConnected(authd))
+      setAuthToken(accessToken);
+      connect(accessToken, user).then(authd => setIsConnected(authd));
     }
   })
 
