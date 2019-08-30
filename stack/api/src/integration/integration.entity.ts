@@ -14,6 +14,9 @@ export class Integration {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  access_token: string;
+
   @Column('timestamptz')
   createdAt: Date;
 }

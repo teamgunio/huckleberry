@@ -16,4 +16,10 @@ export class IntegrationController {
     await this.integrationService.create(req.user, req.body.integration);
     return 'ok';
   }
+
+  @Post('/api/integrations/:id/authorize')
+  async authorize(@Request() req): Promise<string> {
+    await this.integrationService.authorize(req.user, req.params.id, req.body.code)
+    return 'ok';
+  }
 }

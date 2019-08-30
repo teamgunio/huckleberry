@@ -105,22 +105,22 @@ const Integrations = () => {
 
   useEffect(() => {
     const onAuthorized = async (integration) => {
-      // const uri = `${REACT_APP_API_BASE}/integrations/:${integration.id}/authorize`
-      // await fetch(uri, {
-      //   method: 'Post',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${accessToken}`,
-      //   },
-      //   body: JSON.stringify({ code })
-      // })
+      const uri = `${REACT_APP_API_BASE}/integrations/${integration.id}/authorize`
+      await fetch(uri, {
+        method: 'Post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ code })
+      })
       setPendingIntegration(null);
     }
     if (pendingIntegration && accessToken) onAuthorized(pendingIntegration);
   }, [accessToken, pendingIntegration, setPendingIntegration, code])
 
   const saveIntegration = async (integration) => {
-    const uri = integration.id ? `${REACT_APP_API_BASE}/integrations/:${integration.id}` : `${REACT_APP_API_BASE}/integrations`
+    const uri = integration.id ? `${REACT_APP_API_BASE}/integrations/${integration.id}` : `${REACT_APP_API_BASE}/integrations`
     await fetch(uri, {
       method: integration.id ? 'Put' : 'Post',
       headers: {
