@@ -2,6 +2,7 @@ secrets:
 - kmsKeyName: projects/gunio-tools/locations/global/keyRings/huckleberry-client/cryptoKeys/REACT_APP_AUTH0_CLIENT_ID
   secretEnv:
     REACT_APP_AUTH0_CLIENT_ID: CiQA2QPyrRraXpwQKWZ/UyaU+q0yFAKiZmgSa3FOOEWZsnHupbUSSQBRwF/rpS024yKZGZ2mCLur5NCMoP5gFXYmYaeX+/4ta5BRREPLgAGqb9hdrqSZifiyI7H66+yLG+4V0DoIHpkoaOy2Y6+NKuI=
+    REACT_APP_GITHUB_CLIENT_ID: CiQAwNJHGfkpin3n6WeaFg5dtDrfg7IM6VZxGSpWTr4LsFH+6noSPQD8fFvaz9yPfH1LWcaSAev0zfGVmpkW7smRSyypAUJWmbl4WK1bCgG2UKiiTaSdsFl1ikSRWfr8mE5+rZQ=
 
 steps:
 - name: 'gcr.io/cloud-builders/kubectl'
@@ -34,7 +35,7 @@ steps:
   entrypoint: yarn
   args: ['test']
   dir: 'stack/client'
-  secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
+  secretEnv: ['REACT_APP_AUTH0_CLIENT_ID', 'REACT_APP_GITHUB_CLIENT_ID']
   env:
   - 'CI=true'
   - 'NODE_ENV=test'
@@ -58,7 +59,7 @@ steps:
   entrypoint: yarn
   args: ['build']
   dir: 'stack/client'
-  secretEnv: ['REACT_APP_AUTH0_CLIENT_ID']
+  secretEnv: ['REACT_APP_AUTH0_CLIENT_ID', 'REACT_APP_GITHUB_CLIENT_ID']
   env:
   - 'CI=true'
   - 'NODE_ENV=production'
