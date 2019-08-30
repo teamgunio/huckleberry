@@ -14,7 +14,7 @@ export class EventsService {
   constructor(
   ) {}
 
-  async detectIntent(query: string): Promise<string> {
+  async detectIntent(query: string): Promise<any> {
     const projectId = 'gunio-tools';
     const sessionId = 'asdflajksdflkasjdflkajsdfl';
     const languageCode = 'en';
@@ -31,11 +31,13 @@ export class EventsService {
         },
       };
       const [response] = await sessionClient.detectIntent(request);
-      const { fulfillmentText } = response.queryResult;
-      return fulfillmentText;
-    } catch (err) {
-      console.log(err);
-      return `Y'know, I'm gonna have to get back to you - I'm having issues.`
+      return response.queryResult;
+    } catch (error) {
+      console.log(error);
+      return {
+        fulfillmentText: `Y'know, I'm gonna have to get back to you - I'm having issues.`,
+        error,
+      };
     }
   }
 }

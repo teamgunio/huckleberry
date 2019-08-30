@@ -13,6 +13,10 @@ export interface Message {
   [body: string]: string;
   user: string;
   avatar: string | undefined;
+  metadata: any | undefined;
+  action: string | undefined;
+  parameters: any | undefined;
+  error: any | undefined;
   timestamp: string;
 }
 
@@ -25,11 +29,21 @@ export class EventsGateway {
 
   @SubscribeMessage('messages')
   async latestMessages(client: Client, data: any) {
-    const reply = await this.eventsService.detectIntent(data.body);
+    const metadata = await this.eventsService.detectIntent(data.body);
+    const {
+      fulfillmentText,
+      action,
+      parameters,
+      error,
+    } = metadata;
     const msg:Message = {
-      body: reply,
+      body: fulfillmentText,
       user: 'Doc',
       avatar: null,
+      action,
+      parameters,
+      error,
+      metadata,
       timestamp: (new Date()).toLocaleString(),
     };
     return from([msg]).pipe(map(item => ({ event: 'messages', data: item })));
