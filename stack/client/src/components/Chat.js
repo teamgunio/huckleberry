@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -26,10 +26,15 @@ const useStyles = makeStyles(theme => ({
   header: {
     borderBottom: '1px solid #eaeaea',
     marginBottom: theme.spacing(1),
+    padding: theme.spacing(1),
   },
   messages: {
-    flex: 1,
+    height: 0,
+    overflowY: 'scroll',
+    flexGrow: 1,
     padding: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'column',
   },
   message: {
     marginBottom: theme.spacing(1),
@@ -110,19 +115,29 @@ const ChatContainer = () => {
   )
 }
 
+const scrollTop = ({element}) => {
+  element.current.scrollIntoView({ behavior: 'smooth' })
+}
+
 const ChatMessages = props => {
   const classes = useStyles();
   const { messages } = props;
 
+  const emRef = useRef(null)
+  useEffect(() => scrollTop({element: emRef}), [messages])
+
   return (
-    <div className={classes.messages}>
+    <Fragment>
       <div className={classes.header}>
         <Typography variant="h6">Talk to the Doc</Typography>
       </div>
-      {messages.map((message, i) => (
-        <ChatMessage key={`msg-${i}`} message={message} />
-      ))}
-    </div>
+      <div id="chatMessages" className={classes.messages}>
+        {messages.map((message, i) => (
+          <ChatMessage key={`msg-${i}`} message={message} />
+        ))}
+        <div ref={emRef}></div>
+      </div>
+    </Fragment>
   )
 }
 
