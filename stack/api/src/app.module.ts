@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 import { EventsModule } from './events/events.module';
 import { UserModule } from './user/user.module';
 import { IntegrationModule } from './integration/integration.module';
@@ -31,6 +32,7 @@ const {
       entities: [join(__dirname, '**/**.entity{.ts,.js}')],
       synchronize: true,
     }),
+    ChatModule,
     EventsModule,
     AuthModule,
     UserModule,
@@ -51,6 +53,7 @@ export class AppModule {
         { path: '/api/integrations', method: RequestMethod.POST },
         { path: '/api/integrations/:id', method: RequestMethod.DELETE },
         { path: '/api/integrations/:id/authorize', method: RequestMethod.POST },
+        { path: '/api/messages', method: RequestMethod.GET },
       );
   }
 }

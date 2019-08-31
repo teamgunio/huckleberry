@@ -8,45 +8,23 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Client, Server } from 'socket.io';
 import { EventsService } from './events.service';
-
-export interface Message {
-  [body: string]: string;
-  user: string;
-  avatar: string | undefined;
-  metadata: any | undefined;
-  action: string | undefined;
-  parameters: any | undefined;
-  error: any | undefined;
-  timestamp: string;
-}
+import { ChatService } from '../chat/chat.service';
+import { iMessage } from '../chat/message.entity';
 
 @WebSocketGateway({ namespace: 'api/rtm/events', path: '/api/rtm' })
 export class EventsGateway {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly chatService: ChatService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
 
   @SubscribeMessage('messages')
   async latestMessages(client: Client, data: any) {
-    const metadata = await this.eventsService.detectIntent(data.body);
-    const {
-      fulfillmentText,
-      action,
-      parameters,
-      error,
-    } = metadata;
-    const msg:Message = {
-      body: fulfillmentText,
-      user: 'Doc',
-      avatar: null,
-      action,
-      parameters,
-      error,
-      metadata,
-      timestamp: (new Date()).toLocaleString(),
-    };
-    return from([msg]).pipe(map(item => ({ event: 'messages', data: item })));
+    const reply:iMessage = await this.chatService.handleMessage(data)
+    return from([reply]).pipe(map(item => ({ event: 'messages', data: item })));
   }
 
   @SubscribeMessage('events')

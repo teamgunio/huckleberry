@@ -10,6 +10,7 @@ import { SocketProvider, useSocket } from '../contexts/socket';
 import { useAuth0 } from '../contexts/auth0';
 
 import { handleMessage } from '../services/workflow.js';
+import { get } from '../services/api.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -73,7 +74,18 @@ const ChatContainer = () => {
     body: `Hey, what's up`,
     timestamp: (new Date()).toLocaleString(),
   }]);
-  
+
+  useEffect(() => {
+    const loadHistory = async () => {
+      const res = await get('messages');
+      const messages = await res.json();
+      if (messages.length) setMessages(messages)
+    }
+
+    if (user) loadHistory();
+
+  }, [user]);
+
   useEffect(() => {
     const onMessage = async (message) => {
       handleMessage(message);
