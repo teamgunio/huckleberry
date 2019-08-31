@@ -24,9 +24,9 @@ export class SkillsController {
   }
 
   @Post('/api/skills/:id/run')
-  async run(@Request() req): Promise<boolean> {
-    const skill = await this.skillsService.useSkill(req.user, req.params.id);
-    return skill;
+  async run(@Request() req): Promise<any> {
+    const res = await this.skillsService.useSkill(req.user, req.params.id);
+    return res;
   }
 
 }
