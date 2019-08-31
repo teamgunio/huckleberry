@@ -33,14 +33,13 @@ export class SkillsController {
   async run(@Request() req): Promise<Activity> {
     const activity = new Activity();
     activity.user = req.user.sub;
+    activity.skill = await this.skillsService.findOne(req.params.id);
+    activity.startedAt = new Date();
+    activity.payload = await this.skillsService.useSkill(req.user, req.params.id);
+    activity.completedAt = new Date();
 
-    const startedAt = process.hrtime(); 
-    const res = await this.skillsService.useSkill(req.user, req.params.id);
-    const completedAt = process.hrtime(startedAt);
+    this.activitiesService.storeActivity(activity);
 
-    activity.payload = res;
-    activity.startedAt = new Date(startedAt[0])
-    activity.completedAt = new Date(completedAt[0])
     return activity;
   }
 

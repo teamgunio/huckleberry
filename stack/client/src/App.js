@@ -56,6 +56,7 @@ const AppComponent = (props) => {
               '/',
               '/activities',
               '/integrations',
+              '/integrations/*',
               '/skills',
               '/training',
             ]}

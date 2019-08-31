@@ -10,6 +10,9 @@ export class Activity {
   user: string;
 
   @Column({ type: "json", nullable: true })
+  skill: any;
+
+  @Column({ type: "json", nullable: true })
   payload: any;
 
   @Column('timestamptz')

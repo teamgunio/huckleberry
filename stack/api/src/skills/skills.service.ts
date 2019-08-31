@@ -25,6 +25,10 @@ export class SkillsService {
     return await this.skillsRepository.find();
   }
 
+  async findOne(id: string): Promise<Skill> {
+    return await this.skillsRepository.findOne(id);
+  }
+
   async create(user: any, props: any): Promise<Skill> {
     const skill = new Skill();
     skill.name = props.name;

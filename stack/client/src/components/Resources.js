@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import Integrations from '../views/Integrations';
 import Training from '../views/Training';
+import Activities from '../views/Activities';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,9 +78,7 @@ const Resources = () => {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>
-              
-            </Typography>
+            <Activities />
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExpansionPanel expanded={expanded === 'skills'} onChange={handleChange('skills')}>
