@@ -1,7 +1,7 @@
 # Build
 
 ```bash
-docker build -t tagui:latest .
+docker build -t gcr.io/gunio-tools/huckleberry/node:10.16.3-tagui .
 ```
 
 # Run
@@ -12,5 +12,5 @@ docker run -it --rm \
   --privileged \
   --shm-size 256m \
   -v "$PWD/flows":/flows \
-  tagui bash
+  gcr.io/gunio-tools/huckleberry/node:10.16.3-tagui bash
 ```
