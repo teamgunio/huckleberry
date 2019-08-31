@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import history from '../history';
 
 import { makeStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -30,14 +31,36 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+let unlisten;
+const paths = ['activities', 'skills', 'training', 'integrations'];
+
 const Resources = () => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState('activities');
+  const [expanded, setExpanded] = useState('activities');
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+    history.push(`/${panel}`);
   };
+
+  const handlePathChange = pathname => {
+    const path = pathname.substr(1);
+    if (paths.includes(path)) setExpanded(path);
+  }
+
+  useEffect(() => {
+    handlePathChange(window.location.pathname);
+  },[]);
+
+  useEffect(() => {
+    unlisten = history.listen((location, action) => {
+      handlePathChange(location.pathname);
+    })
+    return function cleanup() {
+      unlisten();
+    }
+  },[]);
 
   return (
     <div className={classes.root}>

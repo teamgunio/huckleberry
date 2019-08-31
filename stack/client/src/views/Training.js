@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import { useAuth0 } from "../contexts/auth0";
-import { get, del } from '../services/api';
+import { get, del, post } from '../services/api';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,21 +85,21 @@ const Training = () => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const skills = await getSkills();
-      setSkills(skills);
-    }
-    if (isAuthenticated) fetchData();
+    // const fetchData = async () => {
+    //   const skills = await getSkills();
+    //   setSkills(skills);
+    // }
+    // if (isAuthenticated) fetchData();
   }, [isAuthenticated])
 
-  // const saveSkill = async (skill) => {
-  //   await post(`skills`, {
-  //     body: JSON.stringify({skill})
-  //   });
+  const saveSkill = async (skill) => {
+    await post(`skills`, {
+      body: JSON.stringify({skill})
+    });
 
-  //   const skills = await getSkills();
-  //   setSkills(skills);
-  // }
+    const skills = await getSkills();
+    setSkills(skills);
+  }
 
   const onDeleteSkill = async (id) => {
     await del(`skills/${id}`);
@@ -110,7 +110,7 @@ const Training = () => {
   return (
     <div className={classes.root}>
       <div className={classes.list}>
-        {skills.length && skills.map(skill => (
+        {(skills.length > 0) && skills.map(skill => (
           <Skill
             key={skill.id}
             skill={skill}
@@ -119,6 +119,7 @@ const Training = () => {
         ))}
         <NewSkillButton
           onClick={() => {}}
+          onReturn={saveSkill}
         />
       </div>
     </div>
