@@ -77,4 +77,15 @@ export class IntegrationService {
       return false;
     }
   }
+
+  async delete(user: any, id: string): Promise<boolean> {
+    try {
+      const integration = await this.integrationRepository.delete(id);
+      return true;
+    } catch(error) {
+      console.error(error);
+      return false;
+    }
+
+  }
 }

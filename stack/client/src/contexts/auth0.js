@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
 
+import { setAuthToken } from '../services/api';
+
 const DEFAULT_REDIRECT_CALLBACK = () =>
   window.history.replaceState({}, document.title, window.location.pathname);
 
@@ -36,6 +38,8 @@ export const Auth0Provider = ({
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
         const accessToken = await auth0FromHook.getTokenSilently();
+
+        setAuthToken(accessToken);
 
         setUser(user);
         setAccessToken(accessToken);

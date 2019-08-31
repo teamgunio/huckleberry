@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Post, Request } from '@nestjs/common';
+import { Controller, Get, Put, Post, Delete, Request } from '@nestjs/common';
 import { IntegrationService } from './integration.service';
 import { Integration } from './integration.entity';
 
@@ -19,7 +19,13 @@ export class IntegrationController {
 
   @Post('/api/integrations/:id/authorize')
   async authorize(@Request() req): Promise<string> {
-    await this.integrationService.authorize(req.user, req.params.id, req.body.code)
+    await this.integrationService.authorize(req.user, req.params.id, req.body.code);
+    return 'ok';
+  }
+
+  @Delete('/api/integrations/:id')
+  async delete(@Request() req): Promise<string> {
+    await this.integrationService.delete(req.user, req.params.id);
     return 'ok';
   }
 }

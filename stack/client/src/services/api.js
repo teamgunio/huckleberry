@@ -17,7 +17,7 @@ export const get = async (path, options={}) => {
       'Authorization': `Bearer ${authToken}`,
     }
   });
-}
+};
 
 export const post = async (path, options={}) => {
   return fetch(`${REACT_APP_API_BASE}/${path}`, {
@@ -29,5 +29,28 @@ export const post = async (path, options={}) => {
       'Content-Type': 'application/json',
     },
   })
+};
 
-}
+export const put = async (path, options={}) => {
+  return fetch(`${REACT_APP_API_BASE}/${path}`, {
+    ...options,
+    method: 'PUT',
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${authToken}`,
+      'Content-Type': 'application/json',
+    },
+  })
+};
+
+export const del = async (path, options={}) => {
+  return fetch(`${REACT_APP_API_BASE}/${path}`, {
+    ...options,
+    method: 'DELETE',
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${authToken}`,
+      'Content-Type': 'application/json',
+    },
+  })
+};

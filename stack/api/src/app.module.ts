@@ -49,6 +49,7 @@ export class AppModule {
         { path: '/api/user', method: RequestMethod.PUT },
         { path: '/api/integrations', method: RequestMethod.GET },
         { path: '/api/integrations', method: RequestMethod.POST },
+        { path: '/api/integrations/:id', method: RequestMethod.DELETE },
         { path: '/api/integrations/:id/authorize', method: RequestMethod.POST },
       );
   }

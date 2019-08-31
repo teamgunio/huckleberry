@@ -8,6 +8,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useAuth0 } from "../contexts/auth0";
 import { startOAuthFlow, useOAuth } from '../contexts/oauth';
 
+import { get, del } from '../services/api';
+
 import EmptyList from '../components/EmptyList';
 import NewIntegration from '../components/NewIntegration';
 
@@ -61,9 +63,11 @@ const Integration = props => {
   const classes = useStyles();
   const {
     integration,
+    onDelete,
   } = props;
 
   const {
+    id,
     type,
     name,
     createdAt,
@@ -71,6 +75,11 @@ const Integration = props => {
 
   const authorize = () => {
     startOAuthFlow(type, integration);
+  }
+
+  const remove = async () => {
+    await del(`integrations/${id}`);
+    onDelete();
   }
 
   return (
@@ -85,7 +94,7 @@ const Integration = props => {
         {type !== 'github' && name }
       </div>
       <Button onClick={authorize}>Reauthorize</Button>
-      <Button color="secondary">Remove</Button>
+      <Button onClick={remove} color="secondary">Remove</Button>
     </div>
   )
 }
@@ -107,15 +116,15 @@ const Integrations = () => {
   const [newIntegration, setNewIntegration] = useState(false);
   const [integrations, setIntegrations] = useState([]);
 
+  const getIntegrations = async () => {
+    const res = await get('integrations');
+    return res.json();
+  }
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`${REACT_APP_API_BASE}/integrations`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        }
-      })
-      const integrations = await res.json()
-      setIntegrations(integrations)
+      const integrations = await getIntegrations();
+      setIntegrations(integrations);
     }
     if (accessToken) fetchData();
   }, [accessToken])
@@ -132,10 +141,10 @@ const Integrations = () => {
         body: JSON.stringify({ code })
       })
       setPendingIntegration(null);
-      setSnackbar(true);
+      setSnackbar('Integration authorized');
     }
     if (pendingIntegration && accessToken) onAuthorized(pendingIntegration);
-  }, [accessToken, pendingIntegration, setPendingIntegration, code])
+  }, [accessToken, pendingIntegration, setPendingIntegration, code]);
 
   const saveIntegration = async (integration) => {
     const uri = integration.id ? `${REACT_APP_API_BASE}/integrations/${integration.id}` : `${REACT_APP_API_BASE}/integrations`
@@ -146,24 +155,33 @@ const Integrations = () => {
         'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify({integration})
-    })
-    setNewIntegration(false)
+    });
+    setNewIntegration(false);
+    setSnackbar('Integration added');
+
+    // startOAuthFlow(integration.type, integration);
+
+    const integrations = await getIntegrations();
+    setIntegrations(integrations);
   }
 
   const addIntegration = () => {
-    setNewIntegration(true)
+    setNewIntegration(true);
   }
 
   const cancelAddIntegration = () => {
-    setNewIntegration(false)
+    setNewIntegration(false);
   }
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
+    if (reason === 'clickaway') return;
     setSnackbar(false);
+  }
+
+  const onDeleted = async () => {
+    const integrations = await getIntegrations();
+    setIntegrations(integrations);
+    setSnackbar('Integration deleted');
   }
 
   return (
@@ -173,7 +191,11 @@ const Integrations = () => {
           { integrations.length > 0 && 
             <Fragment>
               {integrations.map(integration => (
-                <Integration integration={integration} key={integration.id} />
+                <Integration
+                  key={integration.id}
+                  integration={integration}
+                  onDelete={onDeleted}
+                />
               ))}
               <NewIntegrationButton onClick={addIntegration}/>
             </Fragment>
@@ -197,13 +219,13 @@ const Integrations = () => {
           vertical: 'bottom',
           horizontal: 'left',
         }}
-        open={snackbar}
-        autoHideDuration={6000}
+        open={Boolean(snackbar)}
+        autoHideDuration={4000}
         onClose={handleClose}
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">Integration Authorized</span>}
+        message={<span id="message-id">{snackbar}</span>}
         action={[
           <IconButton
             key="close"
