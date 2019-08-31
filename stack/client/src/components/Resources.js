@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import Integrations from '../views/Integrations';
+import Training from '../views/Training';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -87,9 +88,7 @@ const Resources = () => {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>
-              
-            </Typography>
+            <Training />
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExpansionPanel expanded={expanded === 'integrations'} onChange={handleChange('integrations')}>

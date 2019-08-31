@@ -33,8 +33,6 @@ export const Auth0Provider = ({
 
       const isAuthenticated = await auth0FromHook.isAuthenticated();
 
-      setIsAuthenticated(isAuthenticated);
-
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
         const accessToken = await auth0FromHook.getTokenSilently();
@@ -45,6 +43,7 @@ export const Auth0Provider = ({
         setAccessToken(accessToken);
       }
 
+      setIsAuthenticated(isAuthenticated);
       setLoading(false);
     };
     initAuth0();
