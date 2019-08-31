@@ -53,6 +53,7 @@ const AppComponent = (props) => {
           <PrivateRoute
             exact
             path={[
+              '/',
               '/activities',
               '/integrations',
               '/skills',
