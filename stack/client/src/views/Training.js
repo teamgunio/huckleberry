@@ -86,11 +86,11 @@ const Training = () => {
   }
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const skills = await getSkills();
-    //   setSkills(skills);
-    // }
-    // if (isAuthenticated) fetchData();
+    const fetchData = async () => {
+      const skills = await getSkills();
+      setSkills(skills);
+    }
+    if (isAuthenticated) fetchData();
   }, [isAuthenticated])
 
   const saveSkill = async (skill) => {

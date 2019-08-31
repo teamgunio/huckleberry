@@ -11,6 +11,7 @@ import { ChatModule } from './chat/chat.module';
 import { EventsModule } from './events/events.module';
 import { UserModule } from './user/user.module';
 import { IntegrationModule } from './integration/integration.module';
+import { SkillsModule } from './skills/skills.module';
 
 const {
   DB_HOST,
@@ -37,6 +38,7 @@ const {
     AuthModule,
     UserModule,
     IntegrationModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -54,6 +56,10 @@ export class AppModule {
         { path: '/api/integrations/:id', method: RequestMethod.DELETE },
         { path: '/api/integrations/:id/authorize', method: RequestMethod.POST },
         { path: '/api/messages', method: RequestMethod.GET },
+        { path: '/api/skills', method: RequestMethod.GET },
+        { path: '/api/skills', method: RequestMethod.POST },
+        { path: '/api/skills/:id', method: RequestMethod.PUT },
+        { path: '/api/skills/:id', method: RequestMethod.DELETE },
       );
   }
 }

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import history from '../history';
+
+import { post } from '../services/api';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -52,10 +55,18 @@ const Skill = props => {
   const [values, setValues] = useState({
     name: '',
     type: 'action',
+    action: '',
+    params: {},
     provider: 'tagui',
+    template: '',
   });
 
-  const onSave = () => {
+  const onSave = async () => {
+    const skill = values;
+    const res = await post('skills', {
+      body: JSON.stringify({skill})
+    })
+    console.log(await res.text());
     history.goBack();
   };
 
