@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 const Resources = () => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState('integrations');
+  const [expanded, setExpanded] = React.useState('activities');
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -41,6 +41,57 @@ const Resources = () => {
   return (
     <div className={classes.root}>
       <div className={classes.panels}>
+        <ExpansionPanel expanded={expanded === 'activities'} onChange={handleChange('activities')}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="clientsbh-content"
+            id="clientsbh-header"
+          >
+            <Typography className={classes.heading}>Activities</Typography>
+            <Typography className={classes.secondaryHeading}>
+              What I've been up to
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography>
+              
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel expanded={expanded === 'skills'} onChange={handleChange('skills')}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="workflowsbh-content"
+            id="workflowsbh-header"
+          >
+            <Typography className={classes.heading}>Skills</Typography>
+            <Typography className={classes.secondaryHeading}>
+              Things I know how to do
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography>
+              Add a user to a repository on GitHub
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel expanded={expanded === 'training'} onChange={handleChange('training')}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="usersbh-content"
+            id="usersbh-header"
+          >
+            <Typography className={classes.heading}>Training</Typography>
+            <Typography className={classes.secondaryHeading}>
+              Things I'm learning how to do
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography>
+              
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
         <ExpansionPanel expanded={expanded === 'integrations'} onChange={handleChange('integrations')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -49,56 +100,11 @@ const Resources = () => {
           >
             <Typography className={classes.heading}>Integrations</Typography>
             <Typography className={classes.secondaryHeading}>
-              Authorize connections to external systems
+              External systems I'm connected to
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Integrations/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel expanded={expanded === 'workflows'} onChange={handleChange('workflows')}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="workflowsbh-content"
-            id="workflowsbh-header"
-          >
-            <Typography className={classes.heading}>Workflows</Typography>
-            <Typography className={classes.secondaryHeading}>
-              Define automation workflows
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>
-              Add a workflow
-            </Typography>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel expanded={expanded === 'clients'} onChange={handleChange('clients')}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="clientsbh-content"
-            id="clientsbh-header"
-          >
-            <Typography className={classes.heading}>Clients</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>
-              
-            </Typography>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel expanded={expanded === 'users'} onChange={handleChange('users')}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="usersbh-content"
-            id="usersbh-header"
-          >
-            <Typography className={classes.heading}>Users</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>
-              
-            </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
