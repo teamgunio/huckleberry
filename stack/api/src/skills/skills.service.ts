@@ -3,6 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Skill } from './skill.entity';
 
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import * as util from 'util';
+import * as child_process from 'child_process';
+
+const exec = util.promisify(child_process.exec);
+
 @Injectable()
 export class SkillsService {
   constructor(
@@ -38,4 +46,34 @@ export class SkillsService {
     }
   }
 
+  async useSkill(user: any, id: string): Promise<boolean> {
+    const skill = await this.skillsRepository.findOne(id);
+    const {
+      template,
+    } = skill;
+
+    const cwd:string = await new Promise((resolve, reject) => {
+      fs.mkdtemp(path.join(os.tmpdir(), 'tagui-'), (err, folder) => {
+        if (err) return reject(err);
+        resolve(folder);
+      });
+    });
+
+    const data = new Uint8Array(Buffer.from(template.toString()));
+
+    await new Promise((resolve, reject) => {
+      fs.writeFile(`${cwd}/flow`, data, (err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+
+    const res = await exec(`tagui flow debug`, {
+      cwd,
+    })
+
+    console.log(res);
+
+    return true;
+  }
 }

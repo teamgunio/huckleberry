@@ -54,6 +54,7 @@ const Skill = props => {
   const classes = useStyles();
   const {
     skill,
+    onRunSkill,
     onEditSkill,
     onDeleteSkill,
   } = props;
@@ -67,6 +68,7 @@ const Skill = props => {
   return (
     <div className={classes.item} title={`${name} Skill Added ${createdAt.toLocaleString()}`}>
       <div className={classes.itemInfo}>{name}</div>
+      <Button onClick={() => onRunSkill(id)} color="primary">Run</Button>
       <Button onClick={() => onEditSkill(id)} color="primary">Edit</Button>
       <Button onClick={() => onDeleteSkill(id)} color="secondary">Remove</Button>
     </div>
@@ -114,6 +116,10 @@ const Training = () => {
     history.push(`/skills/${id}`)
   }
 
+  const onRunSkill = async (id) => {
+    await post(`skills/${id}/run`);
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.list}>
@@ -121,6 +127,7 @@ const Training = () => {
           <Skill
             key={skill.id}
             skill={skill}
+            onRunSkill={onRunSkill}
             onEditSkill={onEditSkill}
             onDeleteSkill={onDeleteSkill}
           />

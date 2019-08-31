@@ -22,4 +22,11 @@ export class SkillsController {
     await this.skillsService.delete(req.user, req.params.id);
     return 'ok';
   }
+
+  @Post('/api/skills/:id/run')
+  async run(@Request() req): Promise<boolean> {
+    const skill = await this.skillsService.useSkill(req.user, req.params.id);
+    return skill;
+  }
+
 }

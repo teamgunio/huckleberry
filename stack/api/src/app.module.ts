@@ -60,6 +60,7 @@ export class AppModule {
         { path: '/api/skills', method: RequestMethod.POST },
         { path: '/api/skills/:id', method: RequestMethod.PUT },
         { path: '/api/skills/:id', method: RequestMethod.DELETE },
+        { path: '/api/skills/:id/run', method: RequestMethod.POST },
       );
   }
 }
