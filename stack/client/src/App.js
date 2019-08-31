@@ -8,9 +8,11 @@ import { useAuth0 } from './contexts/auth0';
 
 import Loading from './components/Loading';
 import NavBar from './components/NavBar';
+import PrivateRoute from './components/PrivateRoute';
 import Splash from './components/Splash';
 
 import Dashboard from './views/Dashboard';
+import Skill from './views/Skill';
 
 import logo from './logo.svg';
 import './App.css';
@@ -48,7 +50,17 @@ const AppComponent = (props) => {
         <main className="App-main">
           { loading && <Loading /> }
           { !isAuthenticated && <Splash /> }
-          { isAuthenticated && <Dashboard /> }
+          <PrivateRoute
+            exact
+            path={[
+              '/activities',
+              '/integrations',
+              '/skills',
+              '/training',
+            ]}
+            component={Dashboard}
+          />
+          <PrivateRoute exact path="/skills/new" component={Skill} />
         </main>
         <footer className="App-footer">
           <div className="App-info">

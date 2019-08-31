@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import history from '../history';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
@@ -118,7 +119,9 @@ const Training = () => {
           />
         ))}
         <NewSkillButton
-          onClick={() => {}}
+          onClick={() => {
+            history.push('/skills/new');
+          }}
           onReturn={saveSkill}
         />
       </div>
