@@ -63,10 +63,9 @@ const Skill = props => {
 
   const onSave = async () => {
     const skill = values;
-    const res = await post('skills', {
+    await post('skills', {
       body: JSON.stringify({skill})
-    })
-    console.log(await res.text());
+    });
     history.goBack();
   };
 

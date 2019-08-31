@@ -60,7 +60,14 @@ const AppComponent = (props) => {
             ]}
             component={Dashboard}
           />
-          <PrivateRoute exact path="/skills/new" component={Skill} />
+          <PrivateRoute
+            exact
+            path={[
+              '/skills/new',
+              '/skills/:id',
+            ]}
+            component={Skill}
+          />
         </main>
         <footer className="App-footer">
           <div className="App-info">
