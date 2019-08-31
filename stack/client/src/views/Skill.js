@@ -35,6 +35,14 @@ const useStyles = makeStyles(theme => ({
       marginLeft: theme.spacing(1),
     }
   },
+  code: {
+    fontSize: 12,
+    // fontSize: 16,
+    // Use the system font instead of the default Roboto font.
+    // fontFamily: [
+    //   'monospace',
+    // ].join(','),
+  },
 }));
 
 const Skill = props => {
@@ -43,10 +51,12 @@ const Skill = props => {
 
   const [values, setValues] = useState({
     name: '',
-    type: '',
+    type: 'action',
+    provider: 'tagui',
   });
 
   const onSave = () => {
+    history.goBack();
   };
 
   const onCancel = () => {
@@ -96,9 +106,51 @@ const Skill = props => {
               }}
               margin="dense"
             >
-              <MenuItem value="github">GitHub</MenuItem>
+              <MenuItem value="action">Action</MenuItem>
+              <MenuItem value="process">Process</MenuItem>
+              <MenuItem value="workflow">Workflow</MenuItem>
             </Select>
           </FormControl>
+          <FormControl className={classes.formControl}>
+            <TextField
+              onChange={handleTextChange('action')}
+              id="action"
+              label="Action"
+              placeholder="adIntegration or add-user-to-github-repository"
+              margin="normal"
+            />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="provider-simple">Provider</InputLabel>
+            <Select
+              value={values.provider}
+              onChange={handleChange}
+              inputProps={{
+                name: 'provider',
+                id: 'provider-simple',
+              }}
+              margin="dense"
+            >
+              <MenuItem value="tagui">TagUI</MenuItem>
+            </Select>
+          </FormControl>
+          { values.provider === 'tagui' &&
+            <FormControl className={classes.formControl}>
+              <TextField
+                onChange={handleTextChange('template')}
+                id="template"
+                label="TagUI Instructions Template"
+                placeholder={`https://www.typeform.com
+click login
+type username as user@gmail.com
+type password as 12345678
+click btnlogin
+download https://admin.typeform.com/xxx to report.csv`}
+                margin="normal"
+                multiline
+              />
+            </FormControl>
+          }
         </div>
 
         <div className={classes.buttons}>
