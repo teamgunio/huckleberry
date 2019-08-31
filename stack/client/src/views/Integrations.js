@@ -27,11 +27,15 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
   },
   list: {
-    display: 'flex',
-    flexDirection: 'column',
+    // display: 'flex',
+    // flexDirection: 'column',
+    textAlign: 'end',
     '& div:first-child': {
       flex: 1,
     }
+  },
+  addBtn: {
+    marginTop: theme.spacing(1),
   },
   item: {
     display: 'flex',
@@ -50,11 +54,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NewIntegrationButton = props => {
+  const classes = useStyles();
   const { onClick } = props;
   return (
     <Button
       color="primary"
+      variant="contained"
       onClick={onClick}
+      className={classes.addBtn}
     >Add Integration</Button>
   )
 }
@@ -197,7 +204,9 @@ const Integrations = () => {
                   onDelete={onDeleted}
                 />
               ))}
-              <NewIntegrationButton onClick={addIntegration}/>
+              <NewIntegrationButton
+                onClick={addIntegration}
+              />
             </Fragment>
           }
           { integrations.length === 0 && 
