@@ -1,4 +1,4 @@
-FROM gcr.io/gunio-tools/node:base
+FROM gcr.io/gunio-tools/huckleberry/node:10.6.3-tagui
 
 ENV WORKDIR /var/lib/gunio
 RUN mkdir -p $WORKDIR
