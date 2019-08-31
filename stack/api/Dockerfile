@@ -1,4 +1,4 @@
-FROM node:10
+FROM gcr.io/gunio-tools/node:base
 
 ENV WORKDIR /var/lib/gunio
 RUN mkdir -p $WORKDIR

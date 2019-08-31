@@ -43,7 +43,7 @@ steps:
     alpine:latest \
     sh -c 'while ! nc -v -z huckleberry-postgres 5432; do echo -e "\033[92m  ---> waiting for postgres ... \033[0m"; sleep 1; done'
 
-- name: 'node:10.16.3'
+- name: 'gcr.io/gunio-tools/node:base'
   entrypoint: yarn
   args: ['install']
   dir: 'stack/api'
@@ -62,7 +62,7 @@ steps:
   - 'DB_USER=root'
   - 'PORT=3001'
 
-- name: 'node:10.16.3'
+- name: 'gcr.io/gunio-tools/node:base'
   entrypoint: yarn
   args: ['run', 'test:e2e']
   dir: 'stack/api'
@@ -76,7 +76,7 @@ steps:
   - 'DB_USER=root'
   - 'PORT=3001'
 
-- name: 'node:10.16.3'
+- name: 'gcr.io/gunio-tools/node:base'
   entrypoint: yarn
   args: ['build']
   dir: 'stack/api'
