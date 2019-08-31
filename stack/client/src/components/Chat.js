@@ -70,6 +70,7 @@ const ChatContainer = () => {
   const { user } = useAuth0();
   const [messages, setMessages] = useState([{
     avatar: null,
+    from: `Doc`,
     user: `Doc`,
     body: `Hey, what's up`,
     timestamp: (new Date()).toLocaleString(),
@@ -105,6 +106,8 @@ const ChatContainer = () => {
   const sendMessage = (event) => {
     const body = event.target.value
     const message = {
+      to: `Doc`,
+      from: user.sub,
       user: user.name,
       avatar: user.picture,
       body,

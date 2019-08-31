@@ -7,7 +7,7 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Get('/api/messages')
-  async fetch(): Promise<iMessage[]> {
-    return this.chatService.findAll();
+  async fetch(@Request() req): Promise<iMessage[]> {
+    return this.chatService.findAll(req.user);
   }
 }

@@ -20,14 +20,19 @@ export class ChatService {
     private readonly messageRepository: Repository<Message>,
   ) {}
 
-  private storeMessage(message: iMessage) {
-    console.log('storing message');
+  private async storeMessage(message: iMessage): Promise<void> {
+    const msg = new Message();
+    msg.to = message.to;
+    msg.from = message.from;
+    msg.payload = message;
+    msg.timestamp = new Date(message.timestamp);
+    await this.messageRepository.save(msg);
   }
 
   async handleMessage(message: any): Promise<iMessage> {
     await this.storeMessage(message);
     const metadata = await this.detectIntent(message.body);
-    const reply:iMessage = this.buildMessage(metadata);
+    const reply:iMessage = this.buildMessage(message.from, metadata);
     await this.storeMessage(reply);
     return reply;
   }
@@ -56,30 +61,40 @@ export class ChatService {
     }
   }
 
-  buildMessage(metadata: any): iMessage {
+  buildMessage(to: string, metadata: any): iMessage {
     const {
-      fulfillmentText,
       action,
       parameters,
+      fulfillmentText,
       error,
     } = metadata;
 
     const message:iMessage = {
-      body: fulfillmentText,
+      to,
+      from: 'Doc',
       user: 'Doc',
       avatar: null,
       action,
       parameters,
-      error,
       metadata,
+      body: fulfillmentText,
       timestamp: (new Date()).toLocaleString(),
+      error,
     };
 
     return message;
   }
 
-  async findAll(): Promise<iMessage[]> {
-    return (await this.messageRepository.find()).map(msg => {
+  async findAll(user: string): Promise<iMessage[]> {
+    const messages = await this.messageRepository
+      .query(`
+        SELECT *
+        FROM message
+        WHERE "to" = '${user.sub}'
+          OR "from" = '${user.sub}'
+        LIMIT 50;
+      `);
+    return messages.map(msg => {
       const message:iMessage = {
         ...msg.payload
       };
