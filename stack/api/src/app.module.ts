@@ -5,13 +5,14 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+import { ActivitiesModule } from './activities/activities.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { EventsModule } from './events/events.module';
-import { UserModule } from './user/user.module';
 import { IntegrationModule } from './integration/integration.module';
 import { SkillsModule } from './skills/skills.module';
+import { UserModule } from './user/user.module';
 
 const {
   DB_HOST,
@@ -33,12 +34,13 @@ const {
       entities: [join(__dirname, '**/**.entity{.ts,.js}')],
       synchronize: true,
     }),
+    ActivitiesModule,
+    AuthModule,
     ChatModule,
     EventsModule,
-    AuthModule,
-    UserModule,
     IntegrationModule,
     SkillsModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -61,6 +63,7 @@ export class AppModule {
         { path: '/api/skills/:id', method: RequestMethod.PUT },
         { path: '/api/skills/:id', method: RequestMethod.DELETE },
         { path: '/api/skills/:id/run', method: RequestMethod.POST },
+        { path: '/api/activities', method: RequestMethod.GET },
       );
   }
 }
