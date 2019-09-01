@@ -5,6 +5,8 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 
+import TimeAgo from 'react-timeago'
+
 import { useApp } from '../contexts/app';
 
 const useStyles = makeStyles(theme => ({
@@ -108,7 +110,9 @@ const Activity = props => {
           {skill.name}
           </div>
         </div>
-        <div className={classes.date}>{new Date(completedAt).toLocaleString()}</div>
+        <div className={classes.date}>
+          <TimeAgo date={completedAt} />
+        </div>
         <div className={classes.open}>
         { open === true && <KeyboardArrowDown/> }
         { open === false && <KeyboardArrowRight/> }
