@@ -41,7 +41,7 @@ export const OAuthProvider = ({
       }
 
       setCode(code)
-      window.history.replaceState({}, document.title, '/');
+      window.history.replaceState({}, document.title, '/integrations');
     }
 
     const initOAuth = async () => {

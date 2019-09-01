@@ -14,6 +14,8 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
   },
   list: {
+    maxHeight: '20em',
+    overflowY: 'auto',
   },
   item: {
     display: 'flex',
@@ -132,10 +134,14 @@ const Activities = () => {
     activities,
   } = useApp();
 
+  const sorted = [
+    ...activities,
+  ].reverse();
+
   return (
     <div className={classes.root}>
       <div className={classes.list}>
-        {(activities.length > 0) && activities.map(activity => (
+        {(activities.length > 0) && sorted.map(activity => (
           <Activity
             key={activity.id}
             activity={activity}
