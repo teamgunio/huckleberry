@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import { SocketProvider, useSocket } from '../contexts/socket';
+import { useSocket } from '../contexts/socket';
 import { useAuth0 } from '../contexts/auth0';
 import { useApp } from '../contexts/app';
 
@@ -210,9 +210,7 @@ const ChatInput = props => {
 
 const Chat = () => {
   return (
-    <SocketProvider>
-      <ChatContainer />
-    </SocketProvider>
+    <ChatContainer />
   );
 };
 

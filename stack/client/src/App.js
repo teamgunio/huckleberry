@@ -6,6 +6,7 @@ import { version } from '../package.json';
 import history from './history';
 import { useAuth0 } from './contexts/auth0';
 import { AppProvider } from './contexts/app';
+import { SocketProvider } from './contexts/socket';
 
 import Loading from './components/Loading';
 import NavBar from './components/NavBar';
@@ -39,6 +40,7 @@ const AppComponent = (props) => {
   })
 
   return (
+    <SocketProvider>
     <Router history={history}>
       <div className="App">
         <header className="App-header">
@@ -87,6 +89,7 @@ const AppComponent = (props) => {
         </footer>
       </div>
     </Router>
+    </SocketProvider>
   );
 };
 
