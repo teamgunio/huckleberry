@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
+
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import CheckCircle from '@material-ui/icons/CheckCircle';
@@ -73,6 +76,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  progress: {
+    marginRight: theme.spacing(.5),
+    marginLeft: theme.spacing(.5),
+  },
 }));
 
 const Activity = props => {
@@ -81,6 +88,7 @@ const Activity = props => {
 
   const {
     activity,
+    pending,
   } = props;
 
   const {
@@ -103,22 +111,24 @@ const Activity = props => {
       <div className={classes.itemInfo} onClick={handleOpen}>
         <div className={classes.name}>
           <div className={classes.status}>
-            { payload.stderr.length === 0 && <CheckCircle color="primary" /> }
-            { payload.stderr.length > 0 && <ErrorIcon color="error" /> }
+            { pending === true && <CircularProgress size={16} className={classes.progress} /> }
+            { !pending && payload.stderr.length === 0 && <CheckCircle color="primary" /> }
+            { !pending && payload.stderr.length > 0 && <ErrorIcon color="error" /> }
           </div>
           <div>
           {skill.name}
           </div>
         </div>
         <div className={classes.date}>
-          <TimeAgo date={completedAt} />
+          { !pending && <TimeAgo date={completedAt} /> }
+          { pending === true && <TimeAgo date={startedAt} /> }
         </div>
         <div className={classes.open}>
         { open === true && <KeyboardArrowDown/> }
         { open === false && <KeyboardArrowRight/> }
         </div>
       </div>
-      { open === true &&
+      { (open === true && !pending) &&
         <div className={classes.details}>
           <p>Took {took} seconds</p>
           <pre>
@@ -136,6 +146,7 @@ const Activities = () => {
 
   const {
     activities,
+    pending,
   } = useApp();
 
   const sorted = [
@@ -145,6 +156,13 @@ const Activities = () => {
   return (
     <div className={classes.root}>
       <div className={classes.list}>
+        {(pending.length > 0) && pending.map(activity => (
+          <Activity
+            key={activity.startedAt}
+            activity={activity}
+            pending={true}
+          />
+        ))}
         {(activities.length > 0) && sorted.map(activity => (
           <Activity
             key={activity.id}

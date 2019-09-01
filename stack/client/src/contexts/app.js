@@ -9,6 +9,7 @@ export const AppProvider = ({
 }) => {
 
   const [activities, setActivities] = useState([]);
+  const [pending, setPending] = useState([]);
 
   const fetchActivities = async () => {
     const res = await get('activities');
@@ -27,6 +28,8 @@ export const AppProvider = ({
       value={{
         activities,
         fetchActivities,
+        pending,
+        setPending,
       }}
     >
       {children}

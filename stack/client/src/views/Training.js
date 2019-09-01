@@ -69,7 +69,7 @@ const Skill = props => {
   return (
     <div className={classes.item} title={`${name} Skill Added ${createdAt.toLocaleString()}`}>
       <div className={classes.itemInfo}>{name}</div>
-      <Button onClick={() => onRunSkill(id)} color="primary">Run</Button>
+      <Button onClick={() => onRunSkill(skill)} color="primary">Run</Button>
       <Button onClick={() => onEditSkill(id)} color="primary">Edit</Button>
       <Button onClick={() => onDeleteSkill(id)} color="secondary">Remove</Button>
     </div>
@@ -85,6 +85,7 @@ const Training = () => {
 
   const {
     fetchActivities,
+    setPending,
   } = useApp();
 
   const [skills, setSkills] = useState([]);
@@ -121,9 +122,22 @@ const Training = () => {
     history.push(`/skills/${id}`)
   }
 
-  const onRunSkill = async (id) => {
-    await post(`skills/${id}/run`);
+  const onRunSkill = async (skill) => {
+    history.push('/activities');
+    setPending(oldValues => ([
+      ...oldValues,
+      {
+        skill,
+        startedAt: Date.now(),
+        payload: {
+          stdout: '',
+          stderr: '',
+        },
+      },
+    ]));
+    await post(`skills/${skill.id}/run`);
     await fetchActivities();
+    setPending([]);
   }
 
   return (
