@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import Integrations from '../views/Integrations';
 import Training from '../views/Training';
+import Skills from '../views/Skills';
 import Activities from '../views/Activities';
 
 const useStyles = makeStyles(theme => ({
@@ -93,9 +94,7 @@ const Resources = () => {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>
-              Add a user to a repository on GitHub
-            </Typography>
+            <Skills />
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExpansionPanel expanded={expanded === 'training'} onChange={handleChange('training')}>

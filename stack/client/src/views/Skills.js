@@ -36,20 +36,11 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  empty: {
+    flex: 1,
+    textAlign: 'left',
+  },
 }));
-
-const NewSkillButton = props => {
-  const classes = useStyles();
-  const { onClick } = props;
-  return (
-    <Button
-      color="primary"
-      variant="contained"
-      onClick={onClick}
-      className={classes.addBtn}
-    >New Skill</Button>
-  )
-}
 
 const Skill = props => {
   const classes = useStyles();
@@ -76,7 +67,7 @@ const Skill = props => {
   )
 }
 
-const Training = () => {
+const Skills = () => {
   const classes = useStyles();
 
   const {
@@ -91,7 +82,7 @@ const Training = () => {
 
   const getSkills = async () => {
     const res = await get('skills');
-    return (await res.json()).filter(s => s.state === 'training');
+    return (await res.json()).filter(s => s.state === 'learned');
   }
 
   useEffect(() => {
@@ -101,15 +92,6 @@ const Training = () => {
     }
     if (isAuthenticated) fetchData();
   }, [isAuthenticated])
-
-  const saveSkill = async (skill) => {
-    await post(`skills`, {
-      body: JSON.stringify({skill})
-    });
-
-    const skills = await getSkills();
-    setSkills(skills);
-  }
 
   const onDeleteSkill = async (id) => {
     await del(`skills/${id}`);
@@ -138,15 +120,18 @@ const Training = () => {
             onDeleteSkill={onDeleteSkill}
           />
         ))}
-        <NewSkillButton
-          onClick={() => {
-            history.push('/skills/new');
-          }}
-          onReturn={saveSkill}
-        />
+        { skills.length === 0 &&
+          <div className={classes.empty}>
+            I haven't learned any skills yet. Start one in
+            <Button
+              color="primary"
+              onClick={() => history.push('/training')}
+            >Training</Button>.
+          </div>
+        }
       </div>
     </div>
   );
 };
 
-export default Training;
+export default Skills;
