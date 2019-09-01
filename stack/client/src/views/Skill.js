@@ -67,6 +67,7 @@ const Skill = props => {
     params: {},
     provider: 'tagui',
     template: '',
+    state: 'training',
   });
 
   const showProvider = false;
@@ -154,6 +155,21 @@ const Skill = props => {
                 <MenuItem value="action">Action</MenuItem>
                 <MenuItem value="process">Process</MenuItem>
                 <MenuItem value="workflow">Workflow</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="state-simple">State</InputLabel>
+              <Select
+                value={values.state}
+                onChange={handleChange}
+                inputProps={{
+                  name: 'state',
+                  id: 'state-simple',
+                }}
+                margin="dense"
+              >
+                <MenuItem value="training">Training</MenuItem>
+                <MenuItem value="learned">Learned</MenuItem>
               </Select>
             </FormControl>
           </div>

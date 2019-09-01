@@ -29,6 +29,9 @@ export class Skill {
   @Column({ length: 25 })
   provider: string;
 
+  @Column({ length: 25, default: 'Training' })
+  state: string;
+
   @Column({ type: "json", nullable: true })
   template: iTemplate;
 
