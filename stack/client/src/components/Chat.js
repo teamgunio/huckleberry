@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { useSocket } from '../contexts/socket';
 import { useAuth0 } from '../contexts/auth0';
@@ -12,6 +11,8 @@ import { useApp } from '../contexts/app';
 
 import { handleMessage } from '../services/workflow.js';
 import { get } from '../services/api.js';
+
+import Doc from '../doc.jpg';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -175,7 +176,7 @@ const ChatMessage = props => {
         { (avatar) ?
           <Avatar src={avatar} className={classes.avatar} />
           :
-          <AccountCircle className={classes.avatar} />
+          <Avatar src={Doc} className={classes.avatar} />
         }
       </div>
       <div className={classes.user}>{user}</div>
