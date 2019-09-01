@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 
-import { useAuth0 } from "../contexts/auth0";
-import { get } from '../services/api';
+import { useApp } from '../contexts/app';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -130,23 +129,8 @@ const Activities = () => {
   const classes = useStyles();
 
   const {
-    isAuthenticated,
-  } = useAuth0();
-
-  const [activities, setActivities] = useState([]);
-
-  const getActivities = async () => {
-    const res = await get('activities');
-    return res.json();
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const activities = await getActivities();
-      setActivities(activities);
-    }
-    if (isAuthenticated) fetchData();
-  }, [isAuthenticated])
+    activities,
+  } = useApp();
 
   return (
     <div className={classes.root}>

@@ -5,6 +5,7 @@ import { version } from '../package.json';
 
 import history from './history';
 import { useAuth0 } from './contexts/auth0';
+import { AppProvider } from './contexts/app';
 
 import Loading from './components/Loading';
 import NavBar from './components/NavBar';
@@ -19,7 +20,7 @@ import './App.css';
 
 const { REACT_APP_API_BASE } = process.env;
 
-const AppContext = React.createContext('app');
+// const AppContext = React.createContext('app');
 
 const AppComponent = (props) => {
   const { apiVersion, connect } = props
@@ -50,26 +51,30 @@ const AppComponent = (props) => {
         <main className="App-main">
           { loading && <Loading /> }
           { !isAuthenticated && <Splash /> }
-          <PrivateRoute
-            exact
-            path={[
-              '/',
-              '/activities',
-              '/integrations',
-              '/integrations/*',
-              '/skills',
-              '/training',
-            ]}
-            component={Dashboard}
-          />
-          <PrivateRoute
-            exact
-            path={[
-              '/skills/new',
-              '/skills/:id',
-            ]}
-            component={Skill}
-          />
+          { isAuthenticated === true && 
+            <AppProvider>
+              <PrivateRoute
+                exact
+                path={[
+                  '/',
+                  '/activities',
+                  '/integrations',
+                  '/integrations/*',
+                  '/skills',
+                  '/training',
+                ]}
+                component={Dashboard}
+              />
+              <PrivateRoute
+                exact
+                path={[
+                  '/skills/new',
+                  '/skills/:id',
+                ]}
+                component={Skill}
+              />
+            </AppProvider>
+          }
         </main>
         <footer className="App-footer">
           <div className="App-info">
@@ -145,9 +150,7 @@ class App extends Component {
     const { apiVersion } = this.state
 
     return (
-      <AppContext.Provider value={apiVersion}>
-        <AppComponent apiVersion={apiVersion} connect={this.connect.bind(this)} />
-      </AppContext.Provider>
+      <AppComponent apiVersion={apiVersion} connect={this.connect.bind(this)} />
     );
   }
 }

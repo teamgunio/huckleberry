@@ -3,6 +3,7 @@ import history from '../history';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
+import { useApp } from "../contexts/app";
 import { useAuth0 } from "../contexts/auth0";
 import { get, del, post } from '../services/api';
 
@@ -82,6 +83,10 @@ const Training = () => {
     isAuthenticated,
   } = useAuth0();
 
+  const {
+    fetchActivities,
+  } = useApp();
+
   const [skills, setSkills] = useState([]);
 
   const getSkills = async () => {
@@ -118,6 +123,7 @@ const Training = () => {
 
   const onRunSkill = async (id) => {
     await post(`skills/${id}/run`);
+    await fetchActivities();
   }
 
   return (

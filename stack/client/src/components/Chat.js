@@ -8,6 +8,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { SocketProvider, useSocket } from '../contexts/socket';
 import { useAuth0 } from '../contexts/auth0';
+import { useApp } from '../contexts/app';
 
 import { handleMessage } from '../services/workflow.js';
 import { get } from '../services/api.js';
@@ -68,6 +69,7 @@ const ChatContainer = () => {
   const classes = useStyles();
   const { socket } = useSocket();
   const { user } = useAuth0();
+  const { fetchActivities } = useApp();
   const [messages, setMessages] = useState([{
     avatar: null,
     from: `Doc`,
@@ -89,11 +91,13 @@ const ChatContainer = () => {
 
   useEffect(() => {
     const onMessage = async (message) => {
-      handleMessage(message);
       setMessages([
         ...messages,
         message
       ]);
+
+      await handleMessage(message);
+      await fetchActivities();
     }
 
     if (socket) socket.on('messages', onMessage);
@@ -101,7 +105,7 @@ const ChatContainer = () => {
     return function cleanup() {
       if (socket) socket.removeListener('messages', onMessage);
     }
-  }, [socket, messages]);
+  }, [socket, messages, fetchActivities]);
 
   const sendMessage = (event) => {
     const body = event.target.value
