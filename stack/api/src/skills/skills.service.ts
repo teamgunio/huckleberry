@@ -43,13 +43,18 @@ export class SkillsService {
     skill.params = props.params;
     skill.provider = props.provider;
     skill.template = props.template;
+    skill.trainingPhrases = props.trainingPhrases;
+    skill.messages = props.messages;
     skill.createdBy = user.sub;
     skill.createdAt = new Date();
     skill.updatedAt = new Date();
 
     const agentPath = intentsClient.projectAgentPath(projectId);
-    const trainingPhrases = [];
-    const messages = [];
+    const trainingPhrases = props.trainingPhrases.map(text => ({
+      parts: [{ text }]
+    }));
+    const messages = [{ text: { text: skill.messages }}];
+    const parameters = [];
 
     const createIntentRequest = {
       parent: agentPath,
@@ -58,6 +63,7 @@ export class SkillsService {
         action: skill.action,
         trainingPhrases,
         messages,
+        parameters,
       },
     }
 
@@ -71,8 +77,13 @@ export class SkillsService {
     const agentPath = intentsClient.projectAgentPath(projectId);
     let intent;
 
+    const trainingPhrases = skill.trainingPhrases.map(text => ({
+      parts: [{ text }]
+    }));
+    const messages = [{ text: { text: skill.messages }}];
+
     if (skill.intent) {
-      intent = await intentsClient.getIntent({ name: skill.intent.name });
+      [intent] = await intentsClient.getIntent({ name: skill.intent.name });
 
       const updateIntentRequest = {
         parent: agentPath,
@@ -80,6 +91,8 @@ export class SkillsService {
           name: skill.intent.name,
           displayName: skill.name,
           action: skill.action,
+          trainingPhrases,
+          messages,
         },
       };
 
@@ -91,8 +104,9 @@ export class SkillsService {
         parent: agentPath,
         intent: {
           displayName: skill.name,
-          trainingPhrases: [],
-          messages: [],
+          action: skill.action,
+          trainingPhrases,
+          messages,
         },
       };
 

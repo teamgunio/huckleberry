@@ -38,6 +38,8 @@ export class SkillsController {
       template,
       type,
       state,
+      trainingPhrases,
+      messages,
     } = req.body.skill;
 
     const update = {
@@ -47,6 +49,8 @@ export class SkillsController {
       template,
       type,
       state,
+      trainingPhrases,
+      messages,
     };
 
     const res = await this.skillsService.store(update);

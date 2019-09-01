@@ -38,6 +38,12 @@ export class Skill {
   @Column({ type: "json", nullable: true })
   intent: any;
 
+  @Column({ type: "json", nullable: true, default: [] })
+  trainingPhrases: any;
+
+  @Column({ type: "json", nullable: true, default: [] })
+  messages: any;
+
   @Column({ length: 150 })
   createdBy: string;
 
