@@ -91,7 +91,7 @@ const Training = () => {
 
   const getSkills = async () => {
     const res = await get('skills');
-    return (await res.json()).filter(s => s.state === 'training');
+    return (await res.json()).filter(s => s.state !== 'learned');
   }
 
   useEffect(() => {
