@@ -43,6 +43,7 @@ export class SkillsService {
     skill.params = props.params;
     skill.provider = props.provider;
     skill.template = props.template;
+    skill.state = props.state;
     skill.trainingPhrases = props.trainingPhrases;
     skill.messages = props.messages;
     skill.createdBy = user.sub;
