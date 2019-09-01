@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import history from '../history';
 
-import { post } from '../services/api';
+import { get, post, put } from '../services/api';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -38,13 +38,21 @@ const useStyles = makeStyles(theme => ({
       marginLeft: theme.spacing(1),
     }
   },
+  fieldset: {
+    marginBottom: theme.spacing(2),
+    '& > div': {
+      marginRight: theme.spacing(2),
+    },
+  },
   code: {
-    fontSize: 12,
-    // fontSize: 16,
-    // Use the system font instead of the default Roboto font.
-    // fontFamily: [
-    //   'monospace',
-    // ].join(','),
+    '& textarea': {
+      fontSize: 12,
+      // fontSize: 16,
+      // Use the system font instead of the default Roboto font.
+      fontFamily: [
+        'monospace',
+      ].join(','),
+    }
   },
 }));
 
@@ -61,11 +69,15 @@ const Skill = props => {
     template: '',
   });
 
+  const showProvider = false;
+
   const onSave = async () => {
     const skill = values;
-    await post('skills', {
-      body: JSON.stringify({skill})
-    });
+    const options = { body: JSON.stringify({skill}) };
+
+    if (isNew) await post('skills', options);
+    else if (!isNew && skill.id) await put(`skills/${skill.id}`, options);
+
     history.goBack();
   };
 
@@ -85,8 +97,17 @@ const Skill = props => {
   };
 
   useEffect(() => {
+    const fetchData = async (id) => {
+      const res = await get(`skills/${id}`);
+      const skill = await res.json();
+
+      if (skill) setValues({...skill});
+    }
     if (/new$/.test(window.location.pathname)) {
       setIsNew(true);
+    } else {
+      const [match, id] = window.location.pathname.match(/skills\/(.*)$/);
+      fetchData(id, match);
     }
   },[])
 
@@ -96,66 +117,76 @@ const Skill = props => {
         <Typography variant="h5">{ isNew === true && 'New ' }Skill</Typography>
 
         <div className={classes.form}>
-          <FormControl className={classes.formControl}>
-            <TextField
-              onChange={handleTextChange('name')}
-              id="name"
-              label="Name"
-              placeholder="Login to JIRA"
-              margin="normal"
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="type-simple">Type</InputLabel>
-            <Select
-              value={values.type}
-              onChange={handleChange}
-              inputProps={{
-                name: 'type',
-                id: 'type-simple',
-              }}
-              margin="dense"
-            >
-              <MenuItem value="action">Action</MenuItem>
-              <MenuItem value="process">Process</MenuItem>
-              <MenuItem value="workflow">Workflow</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextField
-              onChange={handleTextChange('action')}
-              id="action"
-              label="Action"
-              placeholder="adIntegration or add-user-to-github-repository"
-              margin="normal"
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="provider-simple">Provider</InputLabel>
-            <Select
-              value={values.provider}
-              onChange={handleChange}
-              inputProps={{
-                name: 'provider',
-                id: 'provider-simple',
-              }}
-              margin="dense"
-            >
-              <MenuItem value="tagui">TagUI</MenuItem>
-            </Select>
-          </FormControl>
+          <div className={classes.fieldset}>
+            <FormControl className={classes.formControl}>
+              <TextField
+                onChange={handleTextChange('name')}
+                id="name"
+                label="Name"
+                value={values.name}
+                placeholder="Login to JIRA"
+                margin="normal"
+              />
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <TextField
+                onChange={handleTextChange('action')}
+                id="action"
+                label="Action"
+                value={values.action}
+                placeholder="adIntegration or add-user-to-github-repository"
+                margin="normal"
+              />
+            </FormControl>
+          </div>
+          <div className={classes.fieldset}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="type-simple">Type</InputLabel>
+              <Select
+                value={values.type}
+                onChange={handleChange}
+                inputProps={{
+                  name: 'type',
+                  id: 'type-simple',
+                }}
+                margin="dense"
+              >
+                <MenuItem value="action">Action</MenuItem>
+                <MenuItem value="process">Process</MenuItem>
+                <MenuItem value="workflow">Workflow</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          { showProvider === true && 
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="provider-simple">Provider</InputLabel>
+              <Select
+                value={values.provider}
+                onChange={handleChange}
+                inputProps={{
+                  name: 'provider',
+                  id: 'provider-simple',
+                }}
+                margin="dense"
+              >
+                <MenuItem value="tagui">TagUI</MenuItem>
+              </Select>
+            </FormControl>
+          }
           { values.provider === 'tagui' &&
             <FormControl className={classes.formControl}>
               <TextField
                 onChange={handleTextChange('template')}
                 id="template"
-                label="TagUI Instructions Template"
+                label="TagUI Instructions"
+                value={values.template}
                 placeholder={`https://www.typeform.com
 click login
 type username as user@gmail.com
 type password as 12345678
 click btnlogin
 download https://admin.typeform.com/xxx to report.csv`}
+                className={classes.code}
                 margin="normal"
                 multiline
               />

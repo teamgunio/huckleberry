@@ -23,6 +23,34 @@ export class SkillsController {
     return skill;
   }
 
+  @Get('/api/skills/:id')
+  async fetchOne(@Request() req): Promise<Skill> {
+    return await this.skillsService.findOne(req.params.id);
+  }
+
+  @Put('/api/skills/:id')
+  async update(@Request() req): Promise<Skill> {
+    const skill = await this.skillsService.findOne(req.params.id);
+
+    const {
+      name,
+      action,
+      template,
+      type,
+    } = req.body.skill;
+
+    const update = {
+      ...skill,
+      name,
+      action,
+      template,
+      type
+    };
+
+    const res = await this.skillsService.store(update);
+    return skill;
+  }
+
   @Delete('/api/skills/:id')
   async delete(@Request() req): Promise<string> {
     await this.skillsService.delete(req.user, req.params.id);

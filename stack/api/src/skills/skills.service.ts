@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { Skill } from './skill.entity';
 
 import * as fs from 'fs';
@@ -41,6 +41,10 @@ export class SkillsService {
     skill.createdAt = new Date();
     skill.updatedAt = new Date();
     return await this.skillsRepository.save(skill);
+  }
+
+  async store(skill: Skill): Promise<UpdateResult> {
+    return await this.skillsRepository.update(skill.id, skill);
   }
 
   async delete(user: any, id: string): Promise<boolean> {
