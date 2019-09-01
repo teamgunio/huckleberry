@@ -1,6 +1,6 @@
 {
   "name": "huckleberry",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "The onboarding assistant that does your dirty work.",
   "main": "index.js",
   "repository": "git@github.com:teamgunio/huckleberry",
