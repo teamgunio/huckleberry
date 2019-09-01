@@ -35,6 +35,9 @@ export class Skill {
   @Column({ type: "json", nullable: true })
   template: iTemplate;
 
+  @Column({ type: "json", nullable: true })
+  intent: any;
+
   @Column({ length: 150 })
   createdBy: string;
 
