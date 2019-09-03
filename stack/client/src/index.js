@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import history from './history';
 import App from './App';
+
 import * as serviceWorker from './serviceWorker';
 
 import { Auth0Provider } from "./contexts/auth0";
 import { OAuthProvider } from "./contexts/oauth";
+
+import './index.css';
 
 const {
   NODE_ENV,
@@ -22,13 +25,7 @@ if (NODE_ENV === 'production' && !/https/.test(window.location.protocol)) {
 // A function that routes the user to the right place
 // after login
 const onRedirectCallback = appState => {
-  window.history.replaceState(
-    {},
-    document.title,
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : '/' //window.location.pathname
-  );
+  history.replace('/');
 };
 
 ReactDOM.render(
